@@ -10,6 +10,6 @@
   }
 
   html {
-    background-color: #d9b78e;
+    background-color: var(--chakra-colors-background-500);
   }
 }
