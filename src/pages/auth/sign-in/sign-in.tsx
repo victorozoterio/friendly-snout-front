@@ -71,7 +71,7 @@ export const SignIn = () => {
       flexDirection='column'
       alignItems='center'
       justifyContent='center'
-      bg='background.500'
+      bg='background'
       px={4}
     >
       <VStack spacing={8} w='100%'>
@@ -79,7 +79,7 @@ export const SignIn = () => {
 
         <VStack as='form' w='20rem' spacing={8} align='stretch' onSubmit={handleSubmit(onSubmit)}>
           <FormControl isInvalid={hasEmailError}>
-            <FormLabel mb={1} color='primary.500' fontWeight='bold'>
+            <FormLabel mb={1} color='primary' fontWeight='bold'>
               Email
             </FormLabel>
 
@@ -89,18 +89,20 @@ export const SignIn = () => {
               h='2.5rem'
               bg='white'
               border='1px solid'
-              borderColor={hasEmailError ? 'red' : 'inputBorder.500'}
+              borderColor={hasEmailError ? 'error' : 'inputBorder'}
               borderRadius='md'
-              _placeholder={{ color: 'placeholder.500' }}
-              _hover={{ borderColor: hasEmailError ? 'red' : 'primary.500' }}
+              _placeholder={{ color: 'placeholder' }}
+              _hover={{ borderColor: hasEmailError ? 'error' : 'primary' }}
               _focus={{
-                borderColor: hasEmailError ? 'red' : 'primary.500',
-                outline: hasEmailError ? '1px solid red' : '1px solid var(--chakra-colors-primary-500)',
+                borderColor: hasEmailError ? 'error' : 'primary',
+                outline: hasEmailError
+                  ? '1px solid var(--chakra-colors-error)'
+                  : '1px solid var(--chakra-colors-primary)',
                 outlineOffset: '0px',
               }}
               _autofill={{
                 boxShadow: hasEmailError
-                  ? '0 0 0px 1000px white inset, 0 0 0 1px red !important'
+                  ? '0 0 0px 1000px white inset, 0 0 0 1px var(--chakra-colors-error) !important'
                   : '0 0 0px 1000px white inset',
               }}
               {...register('email')}
@@ -109,8 +111,8 @@ export const SignIn = () => {
             {errors.email && (
               <FormErrorMessage position='absolute' left='0' bottom='-22px' m='0'>
                 <HStack align='center'>
-                  <XCircle size={16} weight='duotone' color='red' />
-                  <Text color='red' fontSize='small'>
+                  <XCircle size={16} weight='duotone' color='var(--chakra-colors-error)' />
+                  <Text color='error' fontSize='small'>
                     {errors.email.message}
                   </Text>
                 </HStack>
@@ -119,7 +121,7 @@ export const SignIn = () => {
           </FormControl>
 
           <FormControl isInvalid={hasPasswordError}>
-            <FormLabel mb={1} color='primary.500' fontWeight='bold'>
+            <FormLabel mb={1} color='primary' fontWeight='bold'>
               Senha
             </FormLabel>
 
@@ -129,18 +131,20 @@ export const SignIn = () => {
               h='2.5rem'
               bg='white'
               border='1px solid'
-              borderColor={hasPasswordError ? 'red' : 'inputBorder.500'}
+              borderColor={hasPasswordError ? 'error' : 'inputBorder'}
               borderRadius='md'
-              _placeholder={{ color: 'placeholder.500' }}
-              _hover={{ borderColor: hasPasswordError ? 'red' : 'primary.500' }}
+              _placeholder={{ color: 'placeholder' }}
+              _hover={{ borderColor: hasPasswordError ? 'error' : 'primary' }}
               _focus={{
-                borderColor: hasPasswordError ? 'red' : 'primary.500',
-                outline: hasPasswordError ? '1px solid red' : '1px solid var(--chakra-colors-primary-500)',
+                borderColor: hasPasswordError ? 'error' : 'primary',
+                outline: hasPasswordError
+                  ? '1px solid var(--chakra-colors-error)'
+                  : '1px solid var(--chakra-colors-primary)',
                 outlineOffset: '0px',
               }}
               _autofill={{
                 boxShadow: hasPasswordError
-                  ? '0 0 0px 1000px white inset, 0 0 0 1px red !important'
+                  ? '0 0 0px 1000px white inset, 0 0 0 1px var(--chakra-colors-error) !important'
                   : '0 0 0px 1000px white inset',
               }}
               {...register('password')}
@@ -149,8 +153,8 @@ export const SignIn = () => {
             {errors.password && (
               <FormErrorMessage position='absolute' left='0' bottom='-22px' m='0'>
                 <HStack align='center'>
-                  <XCircle size={16} weight='duotone' color='red' />
-                  <Text color='red' fontSize='small'>
+                  <XCircle size={16} weight='duotone' color='var(--chakra-colors-error)' />
+                  <Text color='error' fontSize='small'>
                     {errors.password.message}
                   </Text>
                 </HStack>
@@ -160,8 +164,8 @@ export const SignIn = () => {
             {backendError && (
               <Box position='absolute' left='0' bottom='-22px' m='0'>
                 <HStack align='center' spacing={2}>
-                  <WarningCircle size={16} weight='duotone' color='red' />
-                  <Text color='red' fontSize='small'>
+                  <WarningCircle size={16} weight='duotone' color='var(--chakra-colors-error)' />
+                  <Text color='error' fontSize='small'>
                     {backendError}
                   </Text>
                 </HStack>
@@ -173,14 +177,14 @@ export const SignIn = () => {
             type='submit'
             alignSelf='center'
             mt={2}
-            bg='primary.500'
+            bg='primary'
             color='white'
             h='2.5rem'
             w='100%'
             fontWeight='extrabold'
             borderRadius='md'
-            _hover={{ bg: 'primary.600' }}
-            _active={{ bg: 'primary.700' }}
+            _hover={{ bg: 'secondary' }}
+            _active={{ bg: 'secondary' }}
             isLoading={mutation.isPending}
             loadingText='Acessando...'
           >
@@ -189,7 +193,7 @@ export const SignIn = () => {
         </VStack>
       </VStack>
 
-      <Link mt={3} alignSelf='center' color='primary.500' fontSize='sm' _hover={{ textDecoration: 'underline' }}>
+      <Link mt={3} alignSelf='center' color='primary' fontSize='sm' _hover={{ textDecoration: 'underline' }}>
         Esqueceu a senha?
       </Link>
 
