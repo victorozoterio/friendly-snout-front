@@ -66,6 +66,10 @@ export const SignIn = () => {
   const hasEmailError = !!errors.email || !!backendError;
   const hasPasswordError = !!errors.password || !!backendError;
 
+  const handleInputChange = () => {
+    if (mutation.error) mutation.reset();
+  };
+
   const onSubmit = (data: SignInFormData) => {
     mutation.mutate(data);
   };
@@ -111,7 +115,7 @@ export const SignIn = () => {
                   ? '0 0 0px 1000px white inset, 0 0 0 1px var(--chakra-colors-error) !important'
                   : '0 0 0px 1000px white inset',
               }}
-              {...register('email')}
+              {...register('email', { onChange: handleInputChange })}
             />
 
             {errors.email && (
@@ -153,7 +157,7 @@ export const SignIn = () => {
                   ? '0 0 0px 1000px white inset, 0 0 0 1px var(--chakra-colors-error) !important'
                   : '0 0 0px 1000px white inset',
               }}
-              {...register('password')}
+              {...register('password', { onChange: handleInputChange })}
             />
 
             {errors.password && (
