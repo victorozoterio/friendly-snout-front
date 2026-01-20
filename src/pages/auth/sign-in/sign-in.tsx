@@ -199,7 +199,14 @@ export const SignIn = () => {
         </VStack>
       </VStack>
 
-      <Link mt={3} alignSelf='center' color='primary' fontSize='sm' _hover={{ textDecoration: 'underline' }}>
+      <Link
+        mt={3}
+        alignSelf='center'
+        color='primary'
+        fontSize='sm'
+        _hover={{ textDecoration: 'underline' }}
+        href={ROUTES.AUTH.FORGOT_PASSWORD}
+      >
         Esqueceu a senha?
       </Link>
 

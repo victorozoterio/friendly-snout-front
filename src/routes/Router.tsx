@@ -1,6 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 import { ProtectedRoute } from '../components/ProtectedRoute';
-import { Dashboard, SignIn } from '../pages';
+import { Dashboard, ForgotPassword, SignIn } from '../pages';
 import { ROUTES } from './routes.constants';
 
 export function Router() {
@@ -11,6 +11,14 @@ export function Router() {
         element={
           <ProtectedRoute requireAuth={false}>
             <SignIn />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path={ROUTES.AUTH.FORGOT_PASSWORD}
+        element={
+          <ProtectedRoute requireAuth={false}>
+            <ForgotPassword />
           </ProtectedRoute>
         }
       />
