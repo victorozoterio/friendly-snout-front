@@ -1,6 +1,7 @@
 import { ChakraProvider, extendTheme } from '@chakra-ui/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
 import { Router } from './routes';
 import { colors } from './styles/colors';
 
@@ -12,7 +13,9 @@ export function App() {
     <QueryClientProvider client={queryClient}>
       <ChakraProvider theme={theme}>
         <BrowserRouter>
-          <Router />
+          <AuthProvider>
+            <Router />
+          </AuthProvider>
         </BrowserRouter>
       </ChakraProvider>
     </QueryClientProvider>

@@ -17,12 +17,15 @@ import { WarningCircle, XCircle } from 'phosphor-react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import Logo from '../../../assets/logo.png';
+import { useAuth } from '../../../contexts/AuthContext';
 import { ROUTES } from '../../../routes';
 import { signIn } from '../../../services';
+import { storage } from '../../../utils';
 import { type SignInFormData, signInSchema } from './schema';
 
 export const SignIn = () => {
   const navigate = useNavigate();
+  const { setIsAuthenticated } = useAuth();
 
   const {
     register,
@@ -39,7 +42,10 @@ export const SignIn = () => {
 
   const mutation = useMutation({
     mutationFn: signIn,
-    onSuccess: () => {
+    onSuccess: (data) => {
+      const { accessToken, refreshToken } = data;
+      storage.token.setTokens(accessToken, refreshToken);
+      setIsAuthenticated(true);
       navigate(ROUTES.HOME.BASE);
     },
     onError: () => {

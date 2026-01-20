@@ -1,2 +1,1 @@
 export * from './animals';
-export * from './auth';

@@ -1,8 +1,18 @@
-export type SignIn = {
+export type SignInRequest = {
   email: string;
   password: string;
 };
 
-export type RefreshToken = {
+export type RefreshTokenRequest = {
+  refreshToken: string;
+};
+
+export type SignInResponse = {
+  accessToken: string;
+  refreshToken: string;
+};
+
+export type RefreshTokenResponse = {
+  accessToken: string;
   refreshToken: string;
 };

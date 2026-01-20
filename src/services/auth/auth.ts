@@ -1,16 +1,16 @@
-import { api } from './axios';
+import { api } from '../axios';
 import * as T from './types';
 
-export const signIn = async ({ email, password }: T.SignIn) => {
-  const { data } = await api.post('/auth/sign-in', {
+export const signIn = async ({ email, password }: T.SignInRequest) => {
+  const { data } = await api.post<T.SignInResponse>('/auth/sign-in', {
     email,
     password,
   });
   return data;
 };
 
-export const refreshToken = async ({ refreshToken }: T.RefreshToken) => {
-  const { data } = await api.post('/auth/refresh-token', {
+export const refreshToken = async ({ refreshToken }: T.RefreshTokenRequest) => {
+  const { data } = await api.post<T.RefreshTokenResponse>('/auth/refresh-token', {
     refreshToken,
   });
   return data;
