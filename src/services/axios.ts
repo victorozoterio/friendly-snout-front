@@ -23,10 +23,11 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
     const isUnauthorized = error.response?.status === 401;
+    const isSignInEndpoint = originalRequest.url?.includes('/auth/sign-in');
     const isRefreshEndpoint = originalRequest.url?.includes('/auth/refresh-token');
 
-    // Ignora se não for 401, se já tentou refresh ou se for o endpoint de refresh
-    if (!isUnauthorized || originalRequest._retry || isRefreshEndpoint) {
+    // Ignora se não for 401, se já tentou refresh, se for o endpoint de sign-in ou o de refresh
+    if (!isUnauthorized || originalRequest._retry || isSignInEndpoint || isRefreshEndpoint) {
       return Promise.reject(error);
     }
 
