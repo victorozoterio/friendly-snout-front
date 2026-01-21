@@ -46,7 +46,7 @@ export const SignIn = () => {
       const { accessToken, refreshToken } = data;
       storage.token.setTokens(accessToken, refreshToken);
       setIsAuthenticated(true);
-      navigate(ROUTES.HOME.BASE);
+      navigate(ROUTES.DASHBOARD.BASE);
     },
     onError: () => {
       clearErrors();

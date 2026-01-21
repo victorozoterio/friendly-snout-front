@@ -1,8 +1,8 @@
 import { Box, Button, HStack, Spinner, Text, VStack } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
-import Logo from '../../../assets/logo.png';
-import Paws from '../../../assets/paws.png';
-import { totalAnimalsPerStage } from '../../../services';
+import Logo from '../../assets/logo.png';
+import Paws from '../../assets/paws.png';
+import { totalAnimalsPerStage } from '../../services';
 import { StageCard } from './components';
 
 export const Dashboard = () => {

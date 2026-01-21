@@ -23,7 +23,7 @@ export function Router() {
         }
       />
       <Route
-        path={ROUTES.HOME.BASE}
+        path={ROUTES.DASHBOARD.BASE}
         element={
           <ProtectedRoute>
             <Dashboard />

@@ -3,7 +3,7 @@ export const ROUTES = {
     SIGN_IN: '/auth/sign-in',
     FORGOT_PASSWORD: '/auth/forgot-password',
   },
-  HOME: {
+  DASHBOARD: {
     BASE: '/',
   },
 } as const;
