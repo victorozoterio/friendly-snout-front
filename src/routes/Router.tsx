@@ -1,7 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
-import { ProtectedRoute } from '../components/ProtectedRoute';
 import { Animals, Dashboard, ForgotPassword, SignIn } from '../pages';
-import { ROUTES } from './routes.constants';
+import { ProtectedRoute, ROUTES } from './';
 
 export function Router() {
   return (

@@ -1,6 +1,6 @@
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { ROUTES } from '../routes';
+import { ROUTES } from './routes.constants';
 
 interface ProtectedRouteProps {
   children: React.ReactElement;
@@ -11,7 +11,7 @@ export function ProtectedRoute({ children, requireAuth = true }: ProtectedRouteP
   const { isAuthenticated } = useAuth();
 
   if (requireAuth && !isAuthenticated) return <Navigate to={ROUTES.AUTH.SIGN_IN} replace />;
-  if (!requireAuth && isAuthenticated) return <Navigate to={ROUTES.HOME.BASE} replace />;
+  if (!requireAuth && isAuthenticated) return <Navigate to={ROUTES.DASHBOARD.BASE} replace />;
 
   return children;
 }
