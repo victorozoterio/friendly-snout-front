@@ -19,7 +19,7 @@ export const Dashboard = () => {
 
   return (
     <Box minH='100vh' bg='background'>
-      <Header>
+      <Header hideBackButton>
         <Button
           as={Link}
           to={ROUTES.ANIMALS.BASE}
