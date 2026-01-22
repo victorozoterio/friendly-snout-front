@@ -1,3 +1,13 @@
+import type {
+  AnimalBreed,
+  AnimalColor,
+  AnimalFivAndFelv,
+  AnimalSex,
+  AnimalSize,
+  AnimalSpecies,
+  AnimalStatus,
+} from '../../utils';
+
 export type TotalAnimalsPerStageResponse = {
   quarantine: {
     dogs: number;
@@ -14,4 +24,24 @@ export type TotalAnimalsPerStageResponse = {
     cats: number;
     total: number;
   };
+};
+
+export type GetAnimalResponse = {
+  uuid: string;
+  name: string;
+  sex: AnimalSex;
+  species: AnimalSpecies;
+  breed: AnimalBreed;
+  size: AnimalSize;
+  color: AnimalColor;
+  birthDate: string;
+  microchip: string;
+  rga: string;
+  castrated: boolean;
+  fiv: AnimalFivAndFelv;
+  felv: AnimalFivAndFelv;
+  status: AnimalStatus;
+  notes: string;
+  createdAt: Date;
+  updatedAt: Date;
 };

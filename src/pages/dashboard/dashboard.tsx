@@ -1,7 +1,9 @@
 import { Box, Button, HStack, Spinner, Text, VStack } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
+import { Link } from 'react-router-dom';
 import Logo from '../../assets/logo.png';
 import Paws from '../../assets/paws.png';
+import { ROUTES } from '../../routes';
 import { totalAnimalsPerStage } from '../../services';
 import { StageCard } from './components';
 
@@ -22,13 +24,15 @@ export const Dashboard = () => {
 
         <HStack spacing={4}>
           <Button
+            as={Link}
+            to={ROUTES.ANIMALS.BASE}
             bg='primary'
             color='white'
             borderRadius='full'
             px={6}
             h='2.75rem'
-            _hover={{ bg: 'primary' }}
-            _active={{ bg: 'primary' }}
+            _hover={{ bg: 'secondary' }}
+            _active={{ bg: 'secondary' }}
           >
             <HStack spacing={2}>
               <Text fontWeight='bold'>Animais</Text>
@@ -42,8 +46,8 @@ export const Dashboard = () => {
             borderRadius='full'
             px={6}
             h='2.75rem'
-            _hover={{ bg: 'primary' }}
-            _active={{ bg: 'primary' }}
+            _hover={{ bg: 'secondary' }}
+            _active={{ bg: 'secondary' }}
           >
             <HStack spacing={2}>
               <Text fontWeight='bold'>Produtos</Text>

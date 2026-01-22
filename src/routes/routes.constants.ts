@@ -6,4 +6,7 @@ export const ROUTES = {
   DASHBOARD: {
     BASE: '/',
   },
+  ANIMALS: {
+    BASE: '/animals',
+  },
 } as const;
