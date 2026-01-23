@@ -45,3 +45,7 @@ export type GetAnimalResponse = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type DeleteAnimal = {
+  uuid: string;
+};

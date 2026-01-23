@@ -10,3 +10,8 @@ export const getAllAnimals = async () => {
   const { data } = await api.get<T.GetAnimalResponse[]>('/animals');
   return data;
 };
+
+export const deleteAnimal = async ({ uuid }: T.DeleteAnimal) => {
+  const { data } = await api.delete(`/animals/${uuid}`);
+  return data;
+};

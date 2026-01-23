@@ -13,14 +13,17 @@ import {
   Th,
   Thead,
   Tr,
+  useDisclosure,
   VStack,
 } from '@chakra-ui/react';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { NotePencil, Trash } from 'phosphor-react';
+import * as React from 'react';
 
 import Paws from '../../assets/paws.png';
 import { Header } from '../../components';
-import { getAllAnimals } from '../../services';
+import { DeleteConfirmDialog } from '../../components/DeleteConfirmDialog';
+import { deleteAnimal, getAllAnimals } from '../../services';
 import type { GetAnimalResponse } from '../../services/animals/types';
 import { AnimalFivAndFelv } from '../../utils';
 import {
@@ -62,10 +65,40 @@ const FivAndFelvBadge = ({ value }: { value: AnimalFivAndFelv }) => (
 );
 
 export const Animals = () => {
+  const queryClient = useQueryClient();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const { data, isLoading, isError, refetch } = useQuery<GetAnimalResponse[]>({
     queryKey: ['animals', 'list'],
     queryFn: getAllAnimals,
   });
+
+  const [selectedUuid, setSelectedUuid] = React.useState<string | null>(null);
+
+  const deleteMutation = useMutation({
+    mutationFn: deleteAnimal,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['animals', 'list'] });
+      onClose();
+      setSelectedUuid(null);
+    },
+  });
+
+  const openDeleteDialog = (uuid: string) => {
+    setSelectedUuid(uuid);
+    onOpen();
+  };
+
+  const confirmDelete = () => {
+    if (!selectedUuid) return;
+    deleteMutation.mutate({ uuid: selectedUuid });
+  };
+
+  const handleCloseDialog = () => {
+    if (deleteMutation.isPending) return;
+    onClose();
+    setSelectedUuid(null);
+  };
 
   return (
     <Box minH='100vh' bg='background'>
@@ -77,6 +110,14 @@ export const Animals = () => {
           </HStack>
         </Button>
       </Header>
+
+      <DeleteConfirmDialog
+        isOpen={isOpen}
+        onClose={handleCloseDialog}
+        entityLabel='animal'
+        isLoading={deleteMutation.isPending}
+        onConfirm={confirmDelete}
+      />
 
       <Box w='100%' px={8} pt={10} pb={10}>
         {isLoading && (
@@ -144,15 +185,19 @@ export const Animals = () => {
                     <Td color='white' fontWeight='bold'>
                       <Text isTruncated>{translateAnimalStatus(animal.status)}</Text>
                     </Td>
+
                     <Td color='white' fontWeight='bold' textTransform='capitalize'>
                       <Text isTruncated>{animal.name}</Text>
                     </Td>
+
                     <Td color='white' fontWeight='bold'>
                       <Text isTruncated>{translateAnimalSpecies(animal.species)}</Text>
                     </Td>
+
                     <Td color='white' fontWeight='bold'>
                       <Text isTruncated>{translateAnimalBreed(animal.breed)}</Text>
                     </Td>
+
                     <Td color='white' fontWeight='bold'>
                       <Text isTruncated>{translateAnimalSize(animal.size)}</Text>
                     </Td>
@@ -160,9 +205,11 @@ export const Animals = () => {
                     <Td>
                       <YesNoBadge value={animal.castrated} />
                     </Td>
+
                     <Td>
                       <FivAndFelvBadge value={animal.fiv} />
                     </Td>
+
                     <Td>
                       <FivAndFelvBadge value={animal.felv} />
                     </Td>
@@ -170,7 +217,15 @@ export const Animals = () => {
                     <Td>
                       <HStack justify='flex-end' spacing={1}>
                         <IconButton aria-label='Editar' icon={<NotePencil size={20} />} variant='link' color='white' />
-                        <IconButton aria-label='Excluir' icon={<Trash size={20} />} variant='link' color='white' />
+
+                        <IconButton
+                          aria-label='Excluir'
+                          icon={<Trash size={20} />}
+                          variant='link'
+                          color='white'
+                          onClick={() => openDeleteDialog(animal.uuid)}
+                          isLoading={deleteMutation.isPending && selectedUuid === animal.uuid}
+                        />
                       </HStack>
                     </Td>
                   </Tr>
