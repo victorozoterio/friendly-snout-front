@@ -24,7 +24,7 @@ export type Pagination<T> = {
 export type PaginationParams = {
   page?: number;
   limit?: number;
-  sortBy?: string[];
+  sortBy?: string;
   search?: string;
   filter?: Record<string, string>;
 };

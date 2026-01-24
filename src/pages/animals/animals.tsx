@@ -1,5 +1,4 @@
 import {
-  Badge,
   Box,
   Button,
   HStack,
@@ -25,39 +24,12 @@ import { DeleteConfirmDialog, Header, PaginationFooter } from '../../components'
 import { deleteAnimal, getAllAnimals } from '../../services';
 import type { GetAnimalResponse } from '../../services/animals/types';
 import type { Pagination } from '../../utils';
-import { AnimalFivAndFelv } from '../../utils';
 
-const YesNoBadge = ({ value }: { value: boolean }) => (
-  <Badge
-    px={2}
-    py={1}
-    borderRadius='md'
-    bg={value ? 'success' : 'error'}
-    color='white'
-    fontSize='0.9rem'
-    fontWeight='bold'
-    textTransform='capitalize'
-  >
-    {value ? 'Sim' : 'Não'}
-  </Badge>
-);
+import { FivAndFelvBadge, YesNoBadge } from './components/badges';
+import { SortableTh } from './components/sortable-th';
+import { applySort, DEFAULT_SORT_BY, DEFAULT_SORT_STATE, type SortableKey, type SortState } from './utils/sort';
 
-const FivAndFelvBadge = ({ value }: { value: AnimalFivAndFelv }) => (
-  <Badge
-    px={2}
-    py={1}
-    borderRadius='md'
-    bg={value === AnimalFivAndFelv.YES ? 'success' : value === AnimalFivAndFelv.NO ? 'error' : 'warning'}
-    color='white'
-    fontSize='0.9rem'
-    fontWeight='bold'
-    textTransform='capitalize'
-  >
-    {translateAnimalFivAndFelv(value)}
-  </Badge>
-);
-
-export const Animals = () => {
+export const Animals: React.FC = () => {
   const queryClient = useQueryClient();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -66,7 +38,9 @@ export const Animals = () => {
   const [page, setPage] = React.useState(1);
   const [limit, setLimit] = React.useState(10);
 
-  const [sortBy] = React.useState<string[]>(['createdAt:DESC']);
+  const [sortState, setSortState] = React.useState<SortState>(DEFAULT_SORT_STATE);
+  const [sortBy, setSortBy] = React.useState<string>(DEFAULT_SORT_BY);
+
   const [name] = React.useState<string | undefined>(undefined);
 
   const { data, isLoading, isError, refetch, isFetching } = useQuery<Pagination<GetAnimalResponse>>({
@@ -98,6 +72,10 @@ export const Animals = () => {
     if (deleteMutation.isPending) return;
     onClose();
     setSelectedUuid(null);
+  };
+
+  const handleSortClick = (key: SortableKey) => {
+    applySort(key, setPage, setSortState, setSortBy);
   };
 
   return (
@@ -150,30 +128,38 @@ export const Animals = () => {
               <Table w='100%' layout='fixed'>
                 <Thead bg='secondary'>
                   <Tr>
-                    <Th w='10%' color='white'>
+                    <SortableTh w='10%' colKey='status' sortState={sortState} onSort={handleSortClick}>
                       Status
-                    </Th>
-                    <Th w='22%' color='white'>
+                    </SortableTh>
+
+                    <SortableTh w='22%' colKey='name' sortState={sortState} onSort={handleSortClick}>
                       Nome
-                    </Th>
-                    <Th w='10%' color='white'>
+                    </SortableTh>
+
+                    <SortableTh w='10%' colKey='species' sortState={sortState} onSort={handleSortClick}>
                       Espécie
-                    </Th>
-                    <Th w='10%' color='white'>
+                    </SortableTh>
+
+                    <SortableTh w='10%' colKey='breed' sortState={sortState} onSort={handleSortClick}>
                       Raça
-                    </Th>
-                    <Th w='8%' color='white'>
+                    </SortableTh>
+
+                    <SortableTh w='8%' colKey='size' sortState={sortState} onSort={handleSortClick}>
                       Porte
-                    </Th>
-                    <Th w='8%' color='white'>
+                    </SortableTh>
+
+                    <SortableTh w='8%' colKey='castrated' sortState={sortState} onSort={handleSortClick}>
                       Castrado
-                    </Th>
-                    <Th w='12%' color='white'>
+                    </SortableTh>
+
+                    <SortableTh w='12%' colKey='fiv' sortState={sortState} onSort={handleSortClick}>
                       FIV
-                    </Th>
-                    <Th w='12%' color='white'>
+                    </SortableTh>
+
+                    <SortableTh w='12%' colKey='felv' sortState={sortState} onSort={handleSortClick}>
                       FELV
-                    </Th>
+                    </SortableTh>
+
                     <Th w='8%' color='white' textAlign='right' pr={12}>
                       Ações
                     </Th>
@@ -184,7 +170,7 @@ export const Animals = () => {
                   {data?.data.map((animal) => (
                     <Tr key={animal.uuid} bg='primary'>
                       <Td color='white' fontWeight='bold' textTransform='capitalize'>
-                        <Text isTruncated>{animal.status} </Text>
+                        <Text isTruncated>{animal.status}</Text>
                       </Td>
 
                       <Td color='white' fontWeight='bold' textTransform='capitalize'>

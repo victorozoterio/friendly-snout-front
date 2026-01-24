@@ -10,7 +10,7 @@ export const totalAnimalsPerStage = async () => {
 export const getAllAnimals = async ({
   page = 1,
   limit = 10,
-  sortBy = ['createdAt:DESC'],
+  sortBy = 'createdAt:DESC',
   name,
 }: T.GetAllAnimalsParams) => {
   const { data } = await api.get<Pagination<T.GetAnimalResponse>>('/animals', {
