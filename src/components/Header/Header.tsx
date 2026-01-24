@@ -1,16 +1,10 @@
 import { Box, Button, HStack, IconButton, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { ArrowLeft, House, SignOut, UserCircle } from 'phosphor-react';
-import type { ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
 import Logo from '../../assets/logo.png';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../contexts';
 import { ROUTES } from '../../routes';
-
-interface HeaderProps {
-  children?: ReactNode;
-  hideBackButton?: boolean;
-}
+import { HeaderProps } from './types';
 
 export const Header = ({ children, hideBackButton = false }: HeaderProps) => {
   const navigate = useNavigate();

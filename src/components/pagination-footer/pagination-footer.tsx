@@ -1,16 +1,6 @@
 import { Box, HStack, IconButton, Select, Text } from '@chakra-ui/react';
 import { CaretDown, CaretLeft, CaretRight } from 'phosphor-react';
-
-type Props = {
-  page: number;
-  limit: number;
-  totalItems: number;
-  totalPages: number;
-  isFetching?: boolean;
-  onChangeLimit: (value: number) => void;
-  onPrev: () => void;
-  onNext: () => void;
-};
+import { PaginationFooterProps } from './types';
 
 export const PaginationFooter = ({
   page,
@@ -21,7 +11,7 @@ export const PaginationFooter = ({
   onChangeLimit,
   onPrev,
   onNext,
-}: Props) => {
+}: PaginationFooterProps) => {
   const perPage = limit;
   const canGoPrev = page > 1;
   const canGoNext = page < totalPages;

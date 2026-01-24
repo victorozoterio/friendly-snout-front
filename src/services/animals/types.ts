@@ -1,4 +1,4 @@
-import type {
+import {
   AnimalBreed,
   AnimalColor,
   AnimalFivAndFelv,
@@ -51,6 +51,6 @@ export type GetAnimalResponse = {
   updatedAt: Date;
 };
 
-export type DeleteAnimal = {
+export type DeleteAnimalRequest = {
   uuid: string;
 };

@@ -19,7 +19,7 @@ export const getAllAnimals = async ({
   return data;
 };
 
-export const deleteAnimal = async ({ uuid }: T.DeleteAnimal) => {
+export const deleteAnimal = async ({ uuid }: T.DeleteAnimalRequest) => {
   const { data } = await api.delete(`/animals/${uuid}`);
   return data;
 };

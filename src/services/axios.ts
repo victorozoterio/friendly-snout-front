@@ -1,4 +1,4 @@
-import axios, { type InternalAxiosRequestConfig } from 'axios';
+import axios, { InternalAxiosRequestConfig } from 'axios';
 import { ROUTES } from '../routes';
 import { storage } from '../utils';
 import { refreshToken } from './auth/auth';

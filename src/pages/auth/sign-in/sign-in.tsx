@@ -12,16 +12,16 @@ import {
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
+import { AxiosError } from 'axios';
 import { WarningCircle, XCircle } from 'phosphor-react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import Logo from '../../../assets/logo.png';
-import { useAuth } from '../../../contexts/AuthContext';
+import { useAuth } from '../../../contexts';
 import { ROUTES } from '../../../routes';
 import { signIn } from '../../../services';
 import { storage } from '../../../utils';
-import { type SignInFormData, signInSchema } from './schema';
+import { SignInFormData, signInSchema } from './schema';
 
 export const SignIn = () => {
   const navigate = useNavigate();

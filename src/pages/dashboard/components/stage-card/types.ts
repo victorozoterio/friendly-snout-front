@@ -1,4 +1,4 @@
-export type StageCardType = {
+export type StageCardProps = {
   title: string;
   dogs: number;
   cats: number;

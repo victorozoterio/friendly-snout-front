@@ -19,18 +19,16 @@ import {
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { MagnifyingGlass, NotePencil, Trash } from 'phosphor-react';
 import * as React from 'react';
-
 import Paws from '../../assets/paws.png';
 import { DeleteConfirmDialog, Header, PaginationFooter } from '../../components';
 import { deleteAnimal, getAllAnimals } from '../../services';
-import type { GetAnimalResponse } from '../../services/animals/types';
-import type { Pagination } from '../../utils';
-
+import { GetAnimalResponse } from '../../services/animals/types';
+import { Pagination } from '../../utils';
 import { FivAndFelvBadge, YesNoBadge } from './components/badges';
 import { SortableTh } from './components/sortable-th';
-import { applySort, DEFAULT_SORT_BY, DEFAULT_SORT_STATE, type SortableKey, type SortState } from './utils/sort';
+import { applySort, DEFAULT_SORT_BY, DEFAULT_SORT_STATE, SortableKey, SortState } from './utils/sort';
 
-export const Animals: React.FC = () => {
+export const Animals = () => {
   const queryClient = useQueryClient();
   const { isOpen, onOpen, onClose } = useDisclosure();
 

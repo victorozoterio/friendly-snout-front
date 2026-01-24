@@ -1,16 +1,14 @@
 import { Box, HStack, Text, Th } from '@chakra-ui/react';
 import { ArrowDown, ArrowsDownUp, ArrowUp } from 'phosphor-react';
-import * as React from 'react';
+import { SortableThProps, SortIconProps } from './types';
 
-import type { SortableThProps, SortIconProps } from './types';
-
-const SortIcon: React.FC<SortIconProps> = ({ sortState, colKey }) => {
+const SortIcon = ({ sortState, colKey }: SortIconProps) => {
   if (sortState.key !== colKey || !sortState.dir) return <ArrowsDownUp size={16} />;
   if (sortState.dir === 'ASC') return <ArrowUp size={16} />;
   return <ArrowDown size={16} />;
 };
 
-export const SortableTh: React.FC<SortableThProps> = ({ w, colKey, sortState, onSort, children }) => {
+export const SortableTh = ({ w, colKey, sortState, onSort, children }: SortableThProps) => {
   return (
     <Th w={w} color='white' cursor='pointer' userSelect='none' onClick={() => onSort(colKey)} _hover={{ opacity: 0.9 }}>
       <HStack spacing={2}>

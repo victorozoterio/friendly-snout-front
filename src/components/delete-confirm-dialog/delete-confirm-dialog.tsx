@@ -14,16 +14,15 @@ import {
 } from '@chakra-ui/react';
 import { WarningCircle } from 'phosphor-react';
 import * as React from 'react';
+import { DeleteConfirmDialogProps } from './types';
 
-type DeleteConfirmDialogProps = {
-  isOpen: boolean;
-  onClose: () => void;
-  entityLabel: string;
-  isLoading?: boolean;
-  onConfirm: () => void;
-};
-
-export function DeleteConfirmDialog({ isOpen, onClose, entityLabel, isLoading, onConfirm }: DeleteConfirmDialogProps) {
+export const DeleteConfirmDialog = ({
+  isOpen,
+  onClose,
+  entityLabel,
+  isLoading,
+  onConfirm,
+}: DeleteConfirmDialogProps) => {
   const cancelRef = React.useRef<HTMLButtonElement>(null);
   const [value, setValue] = React.useState('');
 
@@ -133,4 +132,4 @@ export function DeleteConfirmDialog({ isOpen, onClose, entityLabel, isLoading, o
       </AlertDialogOverlay>
     </AlertDialog>
   );
-}
+};

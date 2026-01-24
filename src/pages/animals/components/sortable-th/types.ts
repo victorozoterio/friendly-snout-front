@@ -1,4 +1,4 @@
-import type { SortableKey, SortState } from '../../utils';
+import { SortableKey, SortState } from '../../utils';
 
 export type SortIconProps = {
   colKey: SortableKey;

@@ -1,4 +1,4 @@
-import type * as React from 'react';
+import * as React from 'react';
 
 export type SortDir = 'ASC' | 'DESC';
 export type SortState = { key: SortableKey | null; dir: SortDir | null };

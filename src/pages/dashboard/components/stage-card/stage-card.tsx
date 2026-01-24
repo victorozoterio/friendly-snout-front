@@ -1,7 +1,7 @@
 import { Box, Text, VStack } from '@chakra-ui/react';
-import type { StageCardType } from './types';
+import { StageCardProps } from './types';
 
-export const StageCard = ({ title, dogs, cats, total }: StageCardType) => {
+export const StageCard = ({ title, dogs, cats, total }: StageCardProps) => {
   return (
     <VStack spacing={4} align='center'>
       <Text fontWeight='extrabold' fontSize='2xl' color='black'>

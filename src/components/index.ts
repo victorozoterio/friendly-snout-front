@@ -1,3 +1,3 @@
-export * from './DeleteConfirmDialog';
-export * from './Header';
-export * from './PaginationFooter';
+export * from './delete-confirm-dialog';
+export * from './header';
+export * from './pagination-footer';
