@@ -26,13 +26,6 @@ import { deleteAnimal, getAllAnimals } from '../../services';
 import type { GetAnimalResponse } from '../../services/animals/types';
 import type { Pagination } from '../../utils';
 import { AnimalFivAndFelv } from '../../utils';
-import {
-  translateAnimalBreed,
-  translateAnimalFivAndFelv,
-  translateAnimalSize,
-  translateAnimalSpecies,
-  translateAnimalStatus,
-} from './utils';
 
 const YesNoBadge = ({ value }: { value: boolean }) => (
   <Badge
@@ -190,24 +183,24 @@ export const Animals = () => {
                 <Tbody>
                   {data?.data.map((animal) => (
                     <Tr key={animal.uuid} bg='primary'>
-                      <Td color='white' fontWeight='bold'>
-                        <Text isTruncated>{translateAnimalStatus(animal.status)}</Text>
+                      <Td color='white' fontWeight='bold' textTransform='capitalize'>
+                        <Text isTruncated>{animal.status} </Text>
                       </Td>
 
                       <Td color='white' fontWeight='bold' textTransform='capitalize'>
                         <Text isTruncated>{animal.name}</Text>
                       </Td>
 
-                      <Td color='white' fontWeight='bold'>
-                        <Text isTruncated>{translateAnimalSpecies(animal.species)}</Text>
+                      <Td color='white' fontWeight='bold' textTransform='capitalize'>
+                        <Text isTruncated>{animal.species}</Text>
                       </Td>
 
-                      <Td color='white' fontWeight='bold'>
-                        <Text isTruncated>{translateAnimalBreed(animal.breed)}</Text>
+                      <Td color='white' fontWeight='bold' textTransform='capitalize'>
+                        <Text isTruncated>{animal.breed}</Text>
                       </Td>
 
-                      <Td color='white' fontWeight='bold'>
-                        <Text isTruncated>{translateAnimalSize(animal.size)}</Text>
+                      <Td color='white' fontWeight='bold' textTransform='capitalize'>
+                        <Text isTruncated>{animal.size}</Text>
                       </Td>
 
                       <Td>
