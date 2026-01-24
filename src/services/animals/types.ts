@@ -6,6 +6,7 @@ import type {
   AnimalSize,
   AnimalSpecies,
   AnimalStatus,
+  PaginationParams,
 } from '../../utils';
 
 export type TotalAnimalsPerStageResponse = {
@@ -25,6 +26,10 @@ export type TotalAnimalsPerStageResponse = {
     total: number;
   };
 };
+
+export interface GetAllAnimalsParams extends PaginationParams {
+  name?: string;
+}
 
 export type GetAnimalResponse = {
   uuid: string;

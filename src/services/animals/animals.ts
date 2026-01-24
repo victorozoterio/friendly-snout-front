@@ -1,3 +1,4 @@
+import { Pagination } from '../../utils';
 import { api } from '../axios';
 import * as T from './types';
 
@@ -6,8 +7,15 @@ export const totalAnimalsPerStage = async () => {
   return data;
 };
 
-export const getAllAnimals = async () => {
-  const { data } = await api.get<T.GetAnimalResponse[]>('/animals');
+export const getAllAnimals = async ({
+  page = 1,
+  limit = 10,
+  sortBy = ['createdAt:DESC'],
+  name,
+}: T.GetAllAnimalsParams) => {
+  const { data } = await api.get<Pagination<T.GetAnimalResponse>>('/animals', {
+    params: { page, limit, name, sortBy },
+  });
   return data;
 };
 

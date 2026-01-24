@@ -16,7 +16,7 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { NotePencil, Trash } from 'phosphor-react';
 import * as React from 'react';
 
@@ -25,6 +25,7 @@ import { Header } from '../../components';
 import { DeleteConfirmDialog } from '../../components/DeleteConfirmDialog';
 import { deleteAnimal, getAllAnimals } from '../../services';
 import type { GetAnimalResponse } from '../../services/animals/types';
+import type { Pagination } from '../../utils';
 import { AnimalFivAndFelv } from '../../utils';
 import {
   translateAnimalBreed,
@@ -68,12 +69,16 @@ export const Animals = () => {
   const queryClient = useQueryClient();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const { data, isLoading, isError, refetch } = useQuery<GetAnimalResponse[]>({
-    queryKey: ['animals', 'list'],
-    queryFn: getAllAnimals,
-  });
-
   const [selectedUuid, setSelectedUuid] = React.useState<string | null>(null);
+
+  const [sortBy] = React.useState<string[]>(['createdAt:DESC']);
+  const [name] = React.useState<string | undefined>(undefined);
+
+  const { data, isLoading, isError, refetch } = useQuery<Pagination<GetAnimalResponse>>({
+    queryKey: ['animals', 'list', sortBy, name],
+    queryFn: () => getAllAnimals({ sortBy, name }),
+    placeholderData: keepPreviousData,
+  });
 
   const deleteMutation = useMutation({
     mutationFn: deleteAnimal,
@@ -180,7 +185,7 @@ export const Animals = () => {
               </Thead>
 
               <Tbody>
-                {data?.map((animal) => (
+                {data?.data.map((animal) => (
                   <Tr key={animal.uuid} bg='primary'>
                     <Td color='white' fontWeight='bold'>
                       <Text isTruncated>{translateAnimalStatus(animal.status)}</Text>
