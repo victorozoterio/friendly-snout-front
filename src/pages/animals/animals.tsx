@@ -21,8 +21,7 @@ import { NotePencil, Trash } from 'phosphor-react';
 import * as React from 'react';
 
 import Paws from '../../assets/paws.png';
-import { Header } from '../../components';
-import { DeleteConfirmDialog } from '../../components/DeleteConfirmDialog';
+import { DeleteConfirmDialog, Header, PaginationFooter } from '../../components';
 import { deleteAnimal, getAllAnimals } from '../../services';
 import type { GetAnimalResponse } from '../../services/animals/types';
 import type { Pagination } from '../../utils';
@@ -71,12 +70,15 @@ export const Animals = () => {
 
   const [selectedUuid, setSelectedUuid] = React.useState<string | null>(null);
 
+  const [page, setPage] = React.useState(1);
+  const [limit, setLimit] = React.useState(10);
+
   const [sortBy] = React.useState<string[]>(['createdAt:DESC']);
   const [name] = React.useState<string | undefined>(undefined);
 
-  const { data, isLoading, isError, refetch } = useQuery<Pagination<GetAnimalResponse>>({
-    queryKey: ['animals', 'list', sortBy, name],
-    queryFn: () => getAllAnimals({ sortBy, name }),
+  const { data, isLoading, isError, refetch, isFetching } = useQuery<Pagination<GetAnimalResponse>>({
+    queryKey: ['animals', 'list', page, limit, sortBy, name],
+    queryFn: () => getAllAnimals({ page, limit, sortBy, name }),
     placeholderData: keepPreviousData,
   });
 
@@ -144,100 +146,125 @@ export const Animals = () => {
         )}
 
         {!isLoading && !isError && (
-          <TableContainer
-            bg='rgba(19,113,175,0.12)'
-            borderRadius='xl'
-            border='1px solid'
-            borderColor='background'
-            backdropFilter='blur(6px)'
-          >
-            <Table w='100%' layout='fixed'>
-              <Thead bg='secondary'>
-                <Tr>
-                  <Th w='10%' color='white'>
-                    Status
-                  </Th>
-                  <Th w='22%' color='white'>
-                    Nome
-                  </Th>
-                  <Th w='10%' color='white'>
-                    Espécie
-                  </Th>
-                  <Th w='10%' color='white'>
-                    Raça
-                  </Th>
-                  <Th w='8%' color='white'>
-                    Porte
-                  </Th>
-                  <Th w='8%' color='white'>
-                    Castrado
-                  </Th>
-                  <Th w='12%' color='white'>
-                    FIV
-                  </Th>
-                  <Th w='12%' color='white'>
-                    FELV
-                  </Th>
-                  <Th w='8%' color='white' textAlign='right' pr={12}>
-                    Ações
-                  </Th>
-                </Tr>
-              </Thead>
-
-              <Tbody>
-                {data?.data.map((animal) => (
-                  <Tr key={animal.uuid} bg='primary'>
-                    <Td color='white' fontWeight='bold'>
-                      <Text isTruncated>{translateAnimalStatus(animal.status)}</Text>
-                    </Td>
-
-                    <Td color='white' fontWeight='bold' textTransform='capitalize'>
-                      <Text isTruncated>{animal.name}</Text>
-                    </Td>
-
-                    <Td color='white' fontWeight='bold'>
-                      <Text isTruncated>{translateAnimalSpecies(animal.species)}</Text>
-                    </Td>
-
-                    <Td color='white' fontWeight='bold'>
-                      <Text isTruncated>{translateAnimalBreed(animal.breed)}</Text>
-                    </Td>
-
-                    <Td color='white' fontWeight='bold'>
-                      <Text isTruncated>{translateAnimalSize(animal.size)}</Text>
-                    </Td>
-
-                    <Td>
-                      <YesNoBadge value={animal.castrated} />
-                    </Td>
-
-                    <Td>
-                      <FivAndFelvBadge value={animal.fiv} />
-                    </Td>
-
-                    <Td>
-                      <FivAndFelvBadge value={animal.felv} />
-                    </Td>
-
-                    <Td>
-                      <HStack justify='flex-end' spacing={1}>
-                        <IconButton aria-label='Editar' icon={<NotePencil size={20} />} variant='link' color='white' />
-
-                        <IconButton
-                          aria-label='Excluir'
-                          icon={<Trash size={20} />}
-                          variant='link'
-                          color='white'
-                          onClick={() => openDeleteDialog(animal.uuid)}
-                          isLoading={deleteMutation.isPending && selectedUuid === animal.uuid}
-                        />
-                      </HStack>
-                    </Td>
+          <>
+            <TableContainer
+              bg='rgba(19,113,175,0.12)'
+              borderRadius='xl'
+              border='1px solid'
+              borderColor='background'
+              backdropFilter='blur(6px)'
+            >
+              <Table w='100%' layout='fixed'>
+                <Thead bg='secondary'>
+                  <Tr>
+                    <Th w='10%' color='white'>
+                      Status
+                    </Th>
+                    <Th w='22%' color='white'>
+                      Nome
+                    </Th>
+                    <Th w='10%' color='white'>
+                      Espécie
+                    </Th>
+                    <Th w='10%' color='white'>
+                      Raça
+                    </Th>
+                    <Th w='8%' color='white'>
+                      Porte
+                    </Th>
+                    <Th w='8%' color='white'>
+                      Castrado
+                    </Th>
+                    <Th w='12%' color='white'>
+                      FIV
+                    </Th>
+                    <Th w='12%' color='white'>
+                      FELV
+                    </Th>
+                    <Th w='8%' color='white' textAlign='right' pr={12}>
+                      Ações
+                    </Th>
                   </Tr>
-                ))}
-              </Tbody>
-            </Table>
-          </TableContainer>
+                </Thead>
+
+                <Tbody>
+                  {data?.data.map((animal) => (
+                    <Tr key={animal.uuid} bg='primary'>
+                      <Td color='white' fontWeight='bold'>
+                        <Text isTruncated>{translateAnimalStatus(animal.status)}</Text>
+                      </Td>
+
+                      <Td color='white' fontWeight='bold' textTransform='capitalize'>
+                        <Text isTruncated>{animal.name}</Text>
+                      </Td>
+
+                      <Td color='white' fontWeight='bold'>
+                        <Text isTruncated>{translateAnimalSpecies(animal.species)}</Text>
+                      </Td>
+
+                      <Td color='white' fontWeight='bold'>
+                        <Text isTruncated>{translateAnimalBreed(animal.breed)}</Text>
+                      </Td>
+
+                      <Td color='white' fontWeight='bold'>
+                        <Text isTruncated>{translateAnimalSize(animal.size)}</Text>
+                      </Td>
+
+                      <Td>
+                        <YesNoBadge value={animal.castrated} />
+                      </Td>
+
+                      <Td>
+                        <FivAndFelvBadge value={animal.fiv} />
+                      </Td>
+
+                      <Td>
+                        <FivAndFelvBadge value={animal.felv} />
+                      </Td>
+
+                      <Td>
+                        <HStack justify='flex-end' spacing={1}>
+                          <IconButton
+                            aria-label='Editar'
+                            icon={<NotePencil size={20} />}
+                            variant='link'
+                            color='white'
+                          />
+
+                          <IconButton
+                            aria-label='Excluir'
+                            icon={<Trash size={20} />}
+                            variant='link'
+                            color='white'
+                            onClick={() => openDeleteDialog(animal.uuid)}
+                            isLoading={deleteMutation.isPending && selectedUuid === animal.uuid}
+                          />
+                        </HStack>
+                      </Td>
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
+            </TableContainer>
+
+            {data && (
+              <HStack mt={6} justify='flex-end'>
+                <PaginationFooter
+                  page={data.meta.currentPage}
+                  limit={limit}
+                  totalItems={data.meta.totalItems}
+                  totalPages={data.meta.totalPages}
+                  isFetching={isFetching}
+                  onChangeLimit={(newLimit) => {
+                    setLimit(newLimit);
+                    setPage(1);
+                  }}
+                  onPrev={() => setPage((p) => Math.max(1, p - 1))}
+                  onNext={() => setPage((p) => p + 1)}
+                />
+              </HStack>
+            )}
+          </>
         )}
       </Box>
     </Box>
