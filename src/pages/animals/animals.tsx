@@ -3,6 +3,7 @@ import {
   Button,
   HStack,
   IconButton,
+  Input,
   Spinner,
   Table,
   TableContainer,
@@ -16,7 +17,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { NotePencil, Trash } from 'phosphor-react';
+import { MagnifyingGlass, NotePencil, Trash } from 'phosphor-react';
 import * as React from 'react';
 
 import Paws from '../../assets/paws.png';
@@ -41,11 +42,27 @@ export const Animals: React.FC = () => {
   const [sortState, setSortState] = React.useState<SortState>(DEFAULT_SORT_STATE);
   const [sortBy, setSortBy] = React.useState<string>(DEFAULT_SORT_BY);
 
-  const [name] = React.useState<string | undefined>(undefined);
+  const [search, setSearch] = React.useState('');
+  const [debouncedSearch, setDebouncedSearch] = React.useState('');
+
+  React.useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setDebouncedSearch(search);
+      setPage(1);
+    }, 300);
+
+    return () => window.clearTimeout(timer);
+  }, [search]);
 
   const { data, isLoading, isError, refetch, isFetching } = useQuery<Pagination<GetAnimalResponse>>({
-    queryKey: ['animals', 'list', page, limit, sortBy, name],
-    queryFn: () => getAllAnimals({ page, limit, sortBy, name }),
+    queryKey: ['animals', 'list', page, limit, sortBy, debouncedSearch],
+    queryFn: () =>
+      getAllAnimals({
+        page,
+        limit,
+        sortBy,
+        search: debouncedSearch || undefined,
+      }),
     placeholderData: keepPreviousData,
   });
 
@@ -81,12 +98,44 @@ export const Animals: React.FC = () => {
   return (
     <Box minH='100vh' bg='background'>
       <Header>
-        <Button bg='primary' color='white' borderRadius='full' px={6} h='2.75rem' _hover={{ bg: 'secondary' }}>
-          <HStack spacing={2}>
-            <Text fontWeight='bold'>Cadastrar</Text>
-            <Box as='img' src={Paws} alt='Patas' w='1.1rem' />
-          </HStack>
-        </Button>
+        <HStack spacing={4}>
+          <Box position='relative'>
+            <Box
+              position='absolute'
+              left={3}
+              top='50%'
+              transform='translateY(-50%)'
+              color='primary'
+              zIndex={2}
+              pointerEvents='none'
+            >
+              <MagnifyingGlass size={18} />
+            </Box>
+
+            <Input
+              pl='2.5rem'
+              w='240px'
+              h='2.75rem'
+              bg='white'
+              borderRadius='full'
+              border='1px solid'
+              borderColor='inputBorder'
+              placeholder='Pesquise por um animal'
+              _placeholder={{ color: 'placeholder' }}
+              _focus={{ borderColor: 'primary' }}
+              _focusVisible={{ borderColor: 'primary' }}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </Box>
+
+          <Button bg='primary' color='white' borderRadius='full' px={6} h='2.75rem' _hover={{ bg: 'secondary' }}>
+            <HStack spacing={2}>
+              <Text fontWeight='bold'>Cadastrar</Text>
+              <Box as='img' src={Paws} alt='Patas' w='1.1rem' />
+            </HStack>
+          </Button>
+        </HStack>
       </Header>
 
       <DeleteConfirmDialog

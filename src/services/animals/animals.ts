@@ -11,10 +11,10 @@ export const getAllAnimals = async ({
   page = 1,
   limit = 10,
   sortBy = 'createdAt:DESC',
-  name,
+  search,
 }: T.GetAllAnimalsParams) => {
   const { data } = await api.get<Pagination<T.GetAnimalResponse>>('/animals', {
-    params: { page, limit, name, sortBy },
+    params: { page, limit, sortBy, search },
   });
   return data;
 };

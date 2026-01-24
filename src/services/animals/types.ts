@@ -28,7 +28,7 @@ export type TotalAnimalsPerStageResponse = {
 };
 
 export interface GetAllAnimalsParams extends PaginationParams {
-  name?: string;
+  search?: string;
 }
 
 export type GetAnimalResponse = {
