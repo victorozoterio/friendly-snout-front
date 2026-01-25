@@ -1,1 +1,1 @@
-export * from './brazilian-date-to-iso';
+export * from './convert-date';

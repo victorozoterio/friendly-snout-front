@@ -6,6 +6,7 @@ const inputBorderVar = 'var(--chakra-colors-inputBorder)';
 const placeholderVar = 'var(--chakra-colors-placeholder)';
 const whiteVar = 'var(--chakra-colors-white)';
 const gray100Var = 'var(--chakra-colors-gray-100)';
+const gray900Var = 'var(--chakra-colors-gray-900)';
 const shadowXlVar = 'var(--chakra-shadows-xl)';
 
 type SelectOption<V extends string> = { value: V; label: string };
@@ -41,7 +42,7 @@ export function createSelectStyles<V extends string>(hasError = false): ChakraSt
 
     singleValue: (base) => ({
       ...base,
-      color: primaryColorVar,
+      color: gray900Var,
       fontWeight: 500,
     }),
 
@@ -78,7 +79,7 @@ export function createSelectStyles<V extends string>(hasError = false): ChakraSt
       padding: '10px 12px',
       cursor: 'pointer',
       background: state.isSelected ? primaryColorVar : state.isFocused ? gray100Var : 'transparent',
-      color: state.isSelected ? whiteVar : primaryColorVar,
+      color: state.isSelected ? whiteVar : gray900Var,
       fontWeight: state.isSelected ? 700 : 500,
       '&:active': {
         background: primaryColorVar,

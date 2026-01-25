@@ -22,15 +22,19 @@ import { Select as ChakraSelect } from 'chakra-react-select';
 import { Controller, useForm } from 'react-hook-form';
 import { FormErrorInline } from '../../../../components';
 import { createAnimal } from '../../../../services';
-import { brazilianDateToIso, createSelectStyles, mask } from '../../../../utils';
 import {
-  BreedValue,
-  ColorValue,
-  CreateAnimalDrawerProps,
-  FivFelvValue,
-  SexValue,
-  SizeValue,
-  SpeciesValue,
+  AnimalBreed,
+  AnimalColor,
+  AnimalFivAndFelv,
+  AnimalSex,
+  AnimalSize,
+  AnimalSpecies,
+  brazilianDateToIso,
+  createSelectStyles,
+  mask,
+} from '../../../../utils';
+import {
+  AnimalDrawerProps,
   breedOptions,
   colorOptions,
   findOption,
@@ -38,10 +42,10 @@ import {
   sexOptions,
   sizeOptions,
   speciesOptions,
-} from './options';
+} from '../../utils/options';
 import { CreateAnimalFormData, createAnimalSchema } from './schema';
 
-export const CreateAnimalDrawer = ({ isOpen, onClose }: CreateAnimalDrawerProps) => {
+export const CreateAnimalDrawer = ({ isOpen, onClose }: AnimalDrawerProps) => {
   const queryClient = useQueryClient();
 
   const {
@@ -123,6 +127,8 @@ export const CreateAnimalDrawer = ({ isOpen, onClose }: CreateAnimalDrawerProps)
                 border='1px solid'
                 borderColor={errors.name ? 'error' : 'inputBorder'}
                 borderRadius='md'
+                color='gray.900'
+                fontWeight='medium'
                 _placeholder={{ color: 'placeholder' }}
                 _hover={{ borderColor: errors.name ? 'error' : 'primary' }}
                 _focus={{
@@ -146,13 +152,13 @@ export const CreateAnimalDrawer = ({ isOpen, onClose }: CreateAnimalDrawerProps)
                   name='species'
                   control={control}
                   render={({ field }) => (
-                    <ChakraSelect<{ value: SpeciesValue; label: string }, false>
+                    <ChakraSelect<{ value: AnimalSpecies; label: string }, false>
                       placeholder='Selecione'
                       value={findOption(speciesOptions, field.value)}
                       onChange={(opt) => field.onChange(opt?.value)}
                       options={speciesOptions}
                       isSearchable={false}
-                      chakraStyles={createSelectStyles<SpeciesValue>(!!errors.species)}
+                      chakraStyles={createSelectStyles<AnimalSpecies>(!!errors.species)}
                     />
                   )}
                 />
@@ -167,13 +173,13 @@ export const CreateAnimalDrawer = ({ isOpen, onClose }: CreateAnimalDrawerProps)
                   name='sex'
                   control={control}
                   render={({ field }) => (
-                    <ChakraSelect<{ value: SexValue; label: string }, false>
+                    <ChakraSelect<{ value: AnimalSex; label: string }, false>
                       placeholder='Selecione'
                       value={findOption(sexOptions, field.value)}
                       onChange={(opt) => field.onChange(opt?.value)}
                       options={sexOptions}
                       isSearchable={false}
-                      chakraStyles={createSelectStyles<SexValue>(!!errors.sex)}
+                      chakraStyles={createSelectStyles<AnimalSex>(!!errors.sex)}
                     />
                   )}
                 />
@@ -189,13 +195,13 @@ export const CreateAnimalDrawer = ({ isOpen, onClose }: CreateAnimalDrawerProps)
                 name='breed'
                 control={control}
                 render={({ field }) => (
-                  <ChakraSelect<{ value: BreedValue; label: string }, false>
+                  <ChakraSelect<{ value: AnimalBreed; label: string }, false>
                     placeholder='Selecione'
                     value={findOption(breedOptions, field.value)}
                     onChange={(opt) => field.onChange(opt?.value)}
                     options={breedOptions}
                     isSearchable
-                    chakraStyles={createSelectStyles<BreedValue>(!!errors.breed)}
+                    chakraStyles={createSelectStyles<AnimalBreed>(!!errors.breed)}
                   />
                 )}
               />
@@ -211,13 +217,13 @@ export const CreateAnimalDrawer = ({ isOpen, onClose }: CreateAnimalDrawerProps)
                   name='size'
                   control={control}
                   render={({ field }) => (
-                    <ChakraSelect<{ value: SizeValue; label: string }, false>
+                    <ChakraSelect<{ value: AnimalSize; label: string }, false>
                       placeholder='Selecione'
                       value={findOption(sizeOptions, field.value)}
                       onChange={(opt) => field.onChange(opt?.value)}
                       options={sizeOptions}
                       isSearchable={false}
-                      chakraStyles={createSelectStyles<SizeValue>(!!errors.size)}
+                      chakraStyles={createSelectStyles<AnimalSize>(!!errors.size)}
                     />
                   )}
                 />
@@ -232,13 +238,13 @@ export const CreateAnimalDrawer = ({ isOpen, onClose }: CreateAnimalDrawerProps)
                   name='color'
                   control={control}
                   render={({ field }) => (
-                    <ChakraSelect<{ value: ColorValue; label: string }, false>
+                    <ChakraSelect<{ value: AnimalColor; label: string }, false>
                       placeholder='Selecione'
                       value={findOption(colorOptions, field.value)}
                       onChange={(opt) => field.onChange(opt?.value)}
                       options={colorOptions}
                       isSearchable={false}
-                      chakraStyles={createSelectStyles<ColorValue>(!!errors.color)}
+                      chakraStyles={createSelectStyles<AnimalColor>(!!errors.color)}
                     />
                   )}
                 />
@@ -263,6 +269,8 @@ export const CreateAnimalDrawer = ({ isOpen, onClose }: CreateAnimalDrawerProps)
                     border='1px solid'
                     borderColor={errors.birthDate ? 'error' : 'inputBorder'}
                     borderRadius='md'
+                    color='gray.900'
+                    fontWeight='medium'
                     _hover={{ borderColor: errors.birthDate ? 'error' : 'primary' }}
                     _focus={{
                       borderColor: errors.birthDate ? 'error' : 'primary',
@@ -296,6 +304,8 @@ export const CreateAnimalDrawer = ({ isOpen, onClose }: CreateAnimalDrawerProps)
                   border='1px solid'
                   borderColor='inputBorder'
                   borderRadius='md'
+                  color='gray.900'
+                  fontWeight='medium'
                   _placeholder={{ color: 'placeholder' }}
                   _hover={{ borderColor: 'primary' }}
                   _focus={{
@@ -321,6 +331,8 @@ export const CreateAnimalDrawer = ({ isOpen, onClose }: CreateAnimalDrawerProps)
                   border='1px solid'
                   borderColor='inputBorder'
                   borderRadius='md'
+                  color='gray.900'
+                  fontWeight='medium'
                   _placeholder={{ color: 'placeholder' }}
                   _hover={{ borderColor: 'primary' }}
                   _focus={{
@@ -359,13 +371,13 @@ export const CreateAnimalDrawer = ({ isOpen, onClose }: CreateAnimalDrawerProps)
                   name='fiv'
                   control={control}
                   render={({ field }) => (
-                    <ChakraSelect<{ value: FivFelvValue; label: string }, false>
+                    <ChakraSelect<{ value: AnimalFivAndFelv; label: string }, false>
                       placeholder='Selecione'
                       value={findOption(fivFelvOptions, field.value)}
                       onChange={(opt) => field.onChange(opt?.value)}
                       options={fivFelvOptions}
                       isSearchable={false}
-                      chakraStyles={createSelectStyles<FivFelvValue>(!!errors.fiv)}
+                      chakraStyles={createSelectStyles<AnimalFivAndFelv>(!!errors.fiv)}
                     />
                   )}
                 />
@@ -380,13 +392,13 @@ export const CreateAnimalDrawer = ({ isOpen, onClose }: CreateAnimalDrawerProps)
                   name='felv'
                   control={control}
                   render={({ field }) => (
-                    <ChakraSelect<{ value: FivFelvValue; label: string }, false>
+                    <ChakraSelect<{ value: AnimalFivAndFelv; label: string }, false>
                       placeholder='Selecione'
                       value={findOption(fivFelvOptions, field.value)}
                       onChange={(opt) => field.onChange(opt?.value)}
                       options={fivFelvOptions}
                       isSearchable={false}
-                      chakraStyles={createSelectStyles<FivFelvValue>(!!errors.felv)}
+                      chakraStyles={createSelectStyles<AnimalFivAndFelv>(!!errors.felv)}
                     />
                   )}
                 />

@@ -43,9 +43,9 @@ export type TotalAnimalsPerStageResponse = {
   };
 };
 
-export interface GetAllAnimalsParams extends PaginationParams {
+export type GetAllAnimalsParams = PaginationParams & {
   search?: string;
-}
+};
 
 export type GetAnimalResponse = {
   uuid: string;
@@ -65,6 +65,23 @@ export type GetAnimalResponse = {
   notes?: string;
   createdAt: Date;
   updatedAt: Date;
+};
+
+export type UpdateAnimalRequest = {
+  name?: string;
+  sex?: AnimalSex;
+  species?: AnimalSpecies;
+  breed?: AnimalBreed;
+  size?: AnimalSize;
+  color?: AnimalColor;
+  birthDate?: string;
+  microchip?: string;
+  rga?: string;
+  castrated?: boolean;
+  fiv?: AnimalFivAndFelv;
+  felv?: AnimalFivAndFelv;
+  status?: AnimalStatus;
+  notes?: string;
 };
 
 export type DeleteAnimalRequest = {

@@ -54,6 +54,50 @@ export const getAllAnimals = async ({
   return data;
 };
 
+export const getAnimalByUuid = async (uuid: string) => {
+  const { data } = await api.get<T.GetAnimalResponse>(`/animals/${uuid}`);
+  return data;
+};
+
+export const updateAnimal = async (
+  uuid: string,
+  {
+    name,
+    sex,
+    species,
+    breed,
+    size,
+    color,
+    birthDate,
+    microchip,
+    rga,
+    castrated,
+    fiv,
+    felv,
+    status,
+    notes,
+  }: T.UpdateAnimalRequest,
+) => {
+  const { data } = await api.put(`/animals/${uuid}`, {
+    name,
+    sex,
+    species,
+    breed,
+    size,
+    color,
+    birthDate,
+    microchip,
+    rga,
+    castrated,
+    fiv,
+    felv,
+    status,
+    notes,
+  });
+
+  return data;
+};
+
 export const deleteAnimal = async ({ uuid }: T.DeleteAnimalRequest) => {
   const { data } = await api.delete(`/animals/${uuid}`);
   return data;

@@ -27,12 +27,17 @@ import { Pagination } from '../../utils';
 import { FivAndFelvBadge, YesNoBadge } from './components/badges';
 import { CreateAnimalDrawer } from './components/create-animal-drawer';
 import { SortableTh } from './components/sortable-th';
+import { UpdateAnimalDrawer } from './components/update-animal-drawer';
 import { applySort, DEFAULT_SORT_BY, DEFAULT_SORT_STATE, SortableKey, SortState } from './utils/sort';
 
 export const Animals = () => {
   const queryClient = useQueryClient();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { isOpen: isDrawerOpen, onOpen: onDrawerOpen, onClose: onDrawerClose } = useDisclosure();
+
+  const { isOpen: isCreateDrawerOpen, onOpen: onCreateDrawerOpen, onClose: onCreateDrawerClose } = useDisclosure();
+
+  const { isOpen: isUpdateDrawerOpen, onOpen: onUpdateDrawerOpen, onClose: onUpdateDrawerClose } = useDisclosure();
+  const [editUuid, setEditUuid] = React.useState<string | null>(null);
 
   const [selectedUuid, setSelectedUuid] = React.useState<string | null>(null);
 
@@ -95,6 +100,16 @@ export const Animals = () => {
     applySort(key, setPage, setSortState, setSortBy);
   };
 
+  const openUpdateDrawer = (uuid: string) => {
+    setEditUuid(uuid);
+    onUpdateDrawerOpen();
+  };
+
+  const handleCloseUpdateDrawer = () => {
+    onUpdateDrawerClose();
+    setEditUuid(null);
+  };
+
   return (
     <Box minH='100vh' bg='background'>
       <Header>
@@ -136,7 +151,7 @@ export const Animals = () => {
             px={6}
             h='2.75rem'
             _hover={{ bg: 'secondary' }}
-            onClick={onDrawerOpen}
+            onClick={onCreateDrawerOpen}
           >
             <HStack spacing={2}>
               <Text fontWeight='bold'>Cadastrar</Text>
@@ -154,7 +169,9 @@ export const Animals = () => {
         onConfirm={confirmDelete}
       />
 
-      <CreateAnimalDrawer isOpen={isDrawerOpen} onClose={onDrawerClose} />
+      <CreateAnimalDrawer isOpen={isCreateDrawerOpen} onClose={onCreateDrawerClose} />
+
+      <UpdateAnimalDrawer isOpen={isUpdateDrawerOpen} onClose={handleCloseUpdateDrawer} uuid={editUuid ?? undefined} />
 
       <Box w='100%' px={8} pt={10} pb={10}>
         {isLoading && (
@@ -267,6 +284,7 @@ export const Animals = () => {
                             icon={<NotePencil size={20} />}
                             variant='link'
                             color='white'
+                            onClick={() => openUpdateDrawer(animal.uuid)}
                           />
 
                           <IconButton

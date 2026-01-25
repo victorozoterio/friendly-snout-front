@@ -1,1 +1,1 @@
-export * from './get-select-styles';
+export * from './create-select-styles';
