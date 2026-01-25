@@ -1,22 +1,11 @@
-import {
-  Box,
-  Button,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  HStack,
-  Input,
-  Link,
-  Text,
-  VStack,
-} from '@chakra-ui/react';
+import { Box, Button, FormControl, FormLabel, Input, Link, VStack } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { WarningCircle, XCircle } from 'phosphor-react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import Logo from '../../../assets/logo.png';
+import { FormErrorInline } from '../../../components';
 import { useAuth } from '../../../contexts';
 import { ROUTES } from '../../../routes';
 import { signIn } from '../../../services';
@@ -53,8 +42,8 @@ export const SignIn = () => {
     },
   });
 
-  const getErrorMessage = () => {
-    if (!mutation.error) return null;
+  const getErrorMessage = (): string | undefined => {
+    if (!mutation.error) return undefined;
 
     const axiosError = mutation.error as AxiosError;
     if (axiosError.response?.status === 401) return 'Credenciais inválidas';
@@ -87,8 +76,8 @@ export const SignIn = () => {
       <VStack spacing={8} w='100%'>
         <Box as='img' src={Logo} alt='Logo Focinho Amigo' w='18rem' />
 
-        <VStack as='form' w='20rem' spacing={8} align='stretch' onSubmit={handleSubmit(onSubmit)}>
-          <FormControl isInvalid={hasEmailError}>
+        <VStack as='form' w='20rem' spacing={2} align='stretch' onSubmit={handleSubmit(onSubmit)}>
+          <FormControl isInvalid={hasEmailError} position='relative' pb='22px'>
             <FormLabel mb={1} color='primary' fontWeight='bold'>
               Email
             </FormLabel>
@@ -118,19 +107,10 @@ export const SignIn = () => {
               {...register('email', { onChange: handleInputChange })}
             />
 
-            {errors.email && (
-              <FormErrorMessage position='absolute' left='0' bottom='-22px' m='0'>
-                <HStack align='center'>
-                  <XCircle size={16} weight='duotone' color='var(--chakra-colors-error)' />
-                  <Text color='error' fontSize='small'>
-                    {errors.email.message}
-                  </Text>
-                </HStack>
-              </FormErrorMessage>
-            )}
+            <FormErrorInline message={errors.email?.message} />
           </FormControl>
 
-          <FormControl isInvalid={hasPasswordError}>
+          <FormControl isInvalid={hasPasswordError} position='relative' pb='22px'>
             <FormLabel mb={1} color='primary' fontWeight='bold'>
               Senha
             </FormLabel>
@@ -160,27 +140,7 @@ export const SignIn = () => {
               {...register('password', { onChange: handleInputChange })}
             />
 
-            {errors.password && (
-              <FormErrorMessage position='absolute' left='0' bottom='-22px' m='0'>
-                <HStack align='center'>
-                  <XCircle size={16} weight='duotone' color='var(--chakra-colors-error)' />
-                  <Text color='error' fontSize='small'>
-                    {errors.password.message}
-                  </Text>
-                </HStack>
-              </FormErrorMessage>
-            )}
-
-            {backendError && (
-              <Box position='absolute' left='0' bottom='-22px' m='0'>
-                <HStack align='center' spacing={2}>
-                  <WarningCircle size={16} weight='duotone' color='var(--chakra-colors-error)' />
-                  <Text color='error' fontSize='small'>
-                    {backendError}
-                  </Text>
-                </HStack>
-              </Box>
-            )}
+            <FormErrorInline message={errors.password?.message || backendError} />
           </FormControl>
 
           <Button

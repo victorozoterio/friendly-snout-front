@@ -25,12 +25,14 @@ import { deleteAnimal, getAllAnimals } from '../../services';
 import { GetAnimalResponse } from '../../services/animals/types';
 import { Pagination } from '../../utils';
 import { FivAndFelvBadge, YesNoBadge } from './components/badges';
+import { CreateAnimalDrawer } from './components/create-animal-drawer';
 import { SortableTh } from './components/sortable-th';
 import { applySort, DEFAULT_SORT_BY, DEFAULT_SORT_STATE, SortableKey, SortState } from './utils/sort';
 
 export const Animals = () => {
   const queryClient = useQueryClient();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen: isDrawerOpen, onOpen: onDrawerOpen, onClose: onDrawerClose } = useDisclosure();
 
   const [selectedUuid, setSelectedUuid] = React.useState<string | null>(null);
 
@@ -127,7 +129,15 @@ export const Animals = () => {
             />
           </Box>
 
-          <Button bg='primary' color='white' borderRadius='full' px={6} h='2.75rem' _hover={{ bg: 'secondary' }}>
+          <Button
+            bg='primary'
+            color='white'
+            borderRadius='full'
+            px={6}
+            h='2.75rem'
+            _hover={{ bg: 'secondary' }}
+            onClick={onDrawerOpen}
+          >
             <HStack spacing={2}>
               <Text fontWeight='bold'>Cadastrar</Text>
               <Box as='img' src={Paws} alt='Patas' w='1.1rem' />
@@ -143,6 +153,8 @@ export const Animals = () => {
         isLoading={deleteMutation.isPending}
         onConfirm={confirmDelete}
       />
+
+      <CreateAnimalDrawer isOpen={isDrawerOpen} onClose={onDrawerClose} />
 
       <Box w='100%' px={8} pt={10} pb={10}>
         {isLoading && (

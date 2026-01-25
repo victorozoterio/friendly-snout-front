@@ -9,6 +9,22 @@ import {
   PaginationParams,
 } from '../../utils';
 
+export type CreateAnimalRequest = {
+  name: string;
+  sex: AnimalSex;
+  species: AnimalSpecies;
+  breed: AnimalBreed;
+  size: AnimalSize;
+  color: AnimalColor;
+  birthDate?: string;
+  microchip?: string;
+  rga?: string;
+  castrated: boolean;
+  fiv: AnimalFivAndFelv;
+  felv: AnimalFivAndFelv;
+  notes?: string;
+};
+
 export type TotalAnimalsPerStageResponse = {
   quarantine: {
     dogs: number;
@@ -46,7 +62,7 @@ export type GetAnimalResponse = {
   fiv: AnimalFivAndFelv;
   felv: AnimalFivAndFelv;
   status: AnimalStatus;
-  notes: string;
+  notes?: string;
   createdAt: Date;
   updatedAt: Date;
 };
