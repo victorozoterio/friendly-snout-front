@@ -14,9 +14,11 @@ import {
   Thead,
   Tr,
   useDisclosure,
+  useToast,
   VStack,
 } from '@chakra-ui/react';
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { AxiosError, AxiosResponse } from 'axios';
 import { MagnifyingGlass, NotePencil, Trash } from 'phosphor-react';
 import * as React from 'react';
 import { DeleteConfirmDialog, Header, PaginationFooter, TableSortableHeader } from '../../components';
@@ -62,12 +64,45 @@ export const MedicineBrands = () => {
     placeholderData: keepPreviousData,
   });
 
+  const toast = useToast();
+
   const deleteMutation = useMutation({
     mutationFn: deleteMedicineBrand,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['medicine-brands', 'list'] });
       onClose();
       setSelectedUuid(null);
+
+      toast({
+        title: 'Marca excluída',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+        position: 'top-right',
+      });
+    },
+    onError: (error: AxiosError<AxiosResponse>) => {
+      if (error.response?.status === 409) {
+        toast({
+          title: 'Não foi possível excluir a marca',
+          description:
+            'Esta marca possui medicamentos ativos vinculados. Remova/Desative os medicamentos antes de excluir a marca.',
+          status: 'warning',
+          duration: 5000,
+          isClosable: true,
+          position: 'top-right',
+        });
+        return;
+      }
+
+      toast({
+        title: 'Erro ao excluir a marca',
+        description: 'Não foi possível excluir a marca. Tente novamente mais tarde.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'top-right',
+      });
     },
   });
 
