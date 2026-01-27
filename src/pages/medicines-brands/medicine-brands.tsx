@@ -74,7 +74,7 @@ export const MedicineBrands = () => {
       setSelectedUuid(null);
 
       toast({
-        title: 'Marca excluída',
+        title: 'Marca excluída com sucesso',
         status: 'success',
         duration: 3000,
         isClosable: true,

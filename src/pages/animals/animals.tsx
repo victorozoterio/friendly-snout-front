@@ -14,6 +14,7 @@ import {
   Thead,
   Tr,
   useDisclosure,
+  useToast,
   VStack,
 } from '@chakra-ui/react';
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -70,12 +71,32 @@ export const Animals = () => {
     placeholderData: keepPreviousData,
   });
 
+  const toast = useToast();
+
   const deleteMutation = useMutation({
     mutationFn: deleteAnimal,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['animals', 'list'] });
       onClose();
       setSelectedUuid(null);
+
+      toast({
+        title: 'Marca excluída com sucesso',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+        position: 'top-right',
+      });
+    },
+    onError: () => {
+      toast({
+        title: 'Erro ao excluir o animal',
+        description: 'Não foi possível excluir o animal. Tente novamente mais tarde.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'top-right',
+      });
     },
   });
 
