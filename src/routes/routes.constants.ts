@@ -9,4 +9,7 @@ export const ROUTES = {
   ANIMALS: {
     BASE: '/animals',
   },
+  MEDICINE_BRANDS: {
+    BASE: '/medicine-brands',
+  },
 } as const;

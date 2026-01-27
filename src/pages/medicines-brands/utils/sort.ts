@@ -2,14 +2,8 @@ import { createSortConfig, type SortState as SortStateGeneric } from '../../../u
 
 const sortConfig = createSortConfig({
   fields: {
-    status: 'status',
     name: 'name',
-    species: 'species',
-    breed: 'breed',
-    size: 'size',
-    castrated: 'castrated',
-    fiv: 'fiv',
-    felv: 'felv',
+    createdAt: 'createdAt',
   },
   defaultSortBy: 'createdAt:DESC',
 });

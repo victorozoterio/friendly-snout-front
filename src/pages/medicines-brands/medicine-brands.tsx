@@ -19,33 +19,26 @@ import {
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { MagnifyingGlass, NotePencil, Trash } from 'phosphor-react';
 import * as React from 'react';
-import Paws from '../../assets/paws.png';
 import { DeleteConfirmDialog, Header, PaginationFooter, TableSortableHeader } from '../../components';
-import { deleteAnimal, getAllAnimals } from '../../services';
-import { GetAnimalResponse } from '../../services/animals/types';
-import { Pagination } from '../../utils';
-import { FivAndFelvBadge, YesNoBadge } from './components/badges';
-import { CreateAnimalDrawer } from './components/create-animal-drawer';
-import { UpdateAnimalDrawer } from './components/update-animal-drawer';
+import { deleteMedicineBrand, getAllMedicineBrands } from '../../services';
+import type { GetMedicineBrandResponse } from '../../services/medicine-brands/types';
+import { mask, Pagination } from '../../utils';
+import { CreateMedicineBrandDrawer } from './components/create-medicine-brand-drawer';
+import { UpdateMedicineBrandDrawer } from './components/update-medicine-brand-drawer';
 import { applySort, DEFAULT_SORT_BY, DEFAULT_SORT_STATE, SortableKey, SortState } from './utils/sort';
 
-export const Animals = () => {
+export const MedicineBrands = () => {
   const queryClient = useQueryClient();
   const { isOpen, onOpen, onClose } = useDisclosure();
-
   const { isOpen: isCreateDrawerOpen, onOpen: onCreateDrawerOpen, onClose: onCreateDrawerClose } = useDisclosure();
-
   const { isOpen: isUpdateDrawerOpen, onOpen: onUpdateDrawerOpen, onClose: onUpdateDrawerClose } = useDisclosure();
+
   const [editUuid, setEditUuid] = React.useState<string | null>(null);
-
   const [selectedUuid, setSelectedUuid] = React.useState<string | null>(null);
-
   const [page, setPage] = React.useState(1);
   const [limit, setLimit] = React.useState(10);
-
   const [sortState, setSortState] = React.useState<SortState>(DEFAULT_SORT_STATE);
   const [sortBy, setSortBy] = React.useState<string>(DEFAULT_SORT_BY);
-
   const [search, setSearch] = React.useState('');
   const [debouncedSearch, setDebouncedSearch] = React.useState('');
 
@@ -54,14 +47,13 @@ export const Animals = () => {
       setDebouncedSearch(search);
       setPage(1);
     }, 300);
-
     return () => window.clearTimeout(timer);
   }, [search]);
 
-  const { data, isLoading, isError, refetch, isFetching } = useQuery<Pagination<GetAnimalResponse>>({
-    queryKey: ['animals', 'list', page, limit, sortBy, debouncedSearch],
+  const { data, isLoading, isError, refetch, isFetching } = useQuery<Pagination<GetMedicineBrandResponse>>({
+    queryKey: ['medicine-brands', 'list', page, limit, sortBy, debouncedSearch],
     queryFn: () =>
-      getAllAnimals({
+      getAllMedicineBrands({
         page,
         limit,
         sortBy,
@@ -71,9 +63,9 @@ export const Animals = () => {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: deleteAnimal,
+    mutationFn: deleteMedicineBrand,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['animals', 'list'] });
+      queryClient.invalidateQueries({ queryKey: ['medicine-brands', 'list'] });
       onClose();
       setSelectedUuid(null);
     },
@@ -125,7 +117,6 @@ export const Animals = () => {
             >
               <MagnifyingGlass size={18} />
             </Box>
-
             <Input
               pl='2.5rem'
               w='240px'
@@ -134,7 +125,7 @@ export const Animals = () => {
               borderRadius='full'
               border='1px solid'
               borderColor='inputBorder'
-              placeholder='Pesquise por um animal'
+              placeholder='Pesquise por uma marca'
               _placeholder={{ color: 'placeholder' }}
               _focus={{ borderColor: 'primary' }}
               _focusVisible={{ borderColor: 'primary' }}
@@ -142,7 +133,6 @@ export const Animals = () => {
               onChange={(e) => setSearch(e.target.value)}
             />
           </Box>
-
           <Button
             bg='primary'
             color='white'
@@ -152,10 +142,7 @@ export const Animals = () => {
             _hover={{ bg: 'secondary' }}
             onClick={onCreateDrawerOpen}
           >
-            <HStack spacing={2}>
-              <Text fontWeight='bold'>Cadastrar</Text>
-              <Box as='img' src={Paws} alt='Patas' w='1.1rem' />
-            </HStack>
+            <Text fontWeight='bold'>Cadastrar</Text>
           </Button>
         </HStack>
       </Header>
@@ -163,27 +150,30 @@ export const Animals = () => {
       <DeleteConfirmDialog
         isOpen={isOpen}
         onClose={handleCloseDialog}
-        entityLabel='animal'
+        entityLabel='marca de medicamento'
         isLoading={deleteMutation.isPending}
         onConfirm={confirmDelete}
       />
 
-      <CreateAnimalDrawer isOpen={isCreateDrawerOpen} onClose={onCreateDrawerClose} />
-
-      <UpdateAnimalDrawer isOpen={isUpdateDrawerOpen} onClose={handleCloseUpdateDrawer} uuid={editUuid ?? undefined} />
+      <CreateMedicineBrandDrawer isOpen={isCreateDrawerOpen} onClose={onCreateDrawerClose} />
+      <UpdateMedicineBrandDrawer
+        isOpen={isUpdateDrawerOpen}
+        onClose={handleCloseUpdateDrawer}
+        uuid={editUuid ?? undefined}
+      />
 
       <Box w='100%' px={8} pt={10} pb={10}>
         {isLoading && (
           <VStack mt={20} spacing={4}>
             <Spinner size='lg' />
-            <Text color='gray.600'>Carregando animais...</Text>
+            <Text color='gray.600'>Carregando marcas...</Text>
           </VStack>
         )}
 
         {isError && (
           <VStack mt={20} spacing={3}>
             <Text color='error' fontWeight='bold'>
-              Erro ao carregar animais
+              Erro ao carregar marcas
             </Text>
             <Button onClick={() => refetch()} bg='primary' color='white'>
               Tentar novamente
@@ -204,118 +194,35 @@ export const Animals = () => {
                 <Thead bg='secondary'>
                   <Tr>
                     <TableSortableHeader
-                      w='10%'
-                      sortKey='status'
-                      sortState={sortState}
-                      onSort={(key) => handleSortClick(key as SortableKey)}
-                    >
-                      Status
-                    </TableSortableHeader>
-
-                    <TableSortableHeader
-                      w='22%'
+                      w='50%'
                       sortKey='name'
                       sortState={sortState}
                       onSort={(key) => handleSortClick(key as SortableKey)}
                     >
                       Nome
                     </TableSortableHeader>
-
                     <TableSortableHeader
-                      w='10%'
-                      sortKey='species'
+                      w='34%'
+                      sortKey='createdAt'
                       sortState={sortState}
                       onSort={(key) => handleSortClick(key as SortableKey)}
                     >
-                      Espécie
+                      Criado em
                     </TableSortableHeader>
-
-                    <TableSortableHeader
-                      w='10%'
-                      sortKey='breed'
-                      sortState={sortState}
-                      onSort={(key) => handleSortClick(key as SortableKey)}
-                    >
-                      Raça
-                    </TableSortableHeader>
-
-                    <TableSortableHeader
-                      w='8%'
-                      sortKey='size'
-                      sortState={sortState}
-                      onSort={(key) => handleSortClick(key as SortableKey)}
-                    >
-                      Porte
-                    </TableSortableHeader>
-
-                    <TableSortableHeader
-                      w='8%'
-                      sortKey='castrated'
-                      sortState={sortState}
-                      onSort={(key) => handleSortClick(key as SortableKey)}
-                    >
-                      Castrado
-                    </TableSortableHeader>
-
-                    <TableSortableHeader
-                      w='12%'
-                      sortKey='fiv'
-                      sortState={sortState}
-                      onSort={(key) => handleSortClick(key as SortableKey)}
-                    >
-                      FIV
-                    </TableSortableHeader>
-
-                    <TableSortableHeader
-                      w='12%'
-                      sortKey='felv'
-                      sortState={sortState}
-                      onSort={(key) => handleSortClick(key as SortableKey)}
-                    >
-                      FELV
-                    </TableSortableHeader>
-
-                    <Th w='8%' color='white' textAlign='right' pr={12}>
+                    <Th w='16%' color='white' textAlign='right' pr={12}>
                       Ações
                     </Th>
                   </Tr>
                 </Thead>
-
                 <Tbody>
-                  {data?.data.map((animal) => (
-                    <Tr key={animal.uuid} bg='primary'>
+                  {data?.data.map((brand) => (
+                    <Tr key={brand.uuid} bg='primary'>
                       <Td color='white' fontWeight='bold' textTransform='capitalize'>
-                        <Text isTruncated>{animal.status}</Text>
+                        <Text isTruncated>{brand.name}</Text>
                       </Td>
-
-                      <Td color='white' fontWeight='bold' textTransform='capitalize'>
-                        <Text isTruncated>{animal.name}</Text>
+                      <Td color='white' fontWeight='bold'>
+                        <Text isTruncated>{mask.formatToBrazilianDate(brand.createdAt)}</Text>
                       </Td>
-
-                      <Td color='white' fontWeight='bold' textTransform='capitalize'>
-                        <Text isTruncated>{animal.species}</Text>
-                      </Td>
-
-                      <Td color='white' fontWeight='bold' textTransform='capitalize'>
-                        <Text isTruncated>{animal.breed}</Text>
-                      </Td>
-
-                      <Td color='white' fontWeight='bold' textTransform='capitalize'>
-                        <Text isTruncated>{animal.size}</Text>
-                      </Td>
-
-                      <Td>
-                        <YesNoBadge value={animal.castrated} />
-                      </Td>
-
-                      <Td>
-                        <FivAndFelvBadge value={animal.fiv} />
-                      </Td>
-
-                      <Td>
-                        <FivAndFelvBadge value={animal.felv} />
-                      </Td>
-
                       <Td>
                         <HStack justify='flex-end' spacing={1}>
                           <IconButton
@@ -323,16 +230,15 @@ export const Animals = () => {
                             icon={<NotePencil size={20} />}
                             variant='link'
                             color='white'
-                            onClick={() => openUpdateDrawer(animal.uuid)}
+                            onClick={() => openUpdateDrawer(brand.uuid)}
                           />
-
                           <IconButton
                             aria-label='Excluir'
                             icon={<Trash size={20} />}
                             variant='link'
                             color='white'
-                            onClick={() => openDeleteDialog(animal.uuid)}
-                            isLoading={deleteMutation.isPending && selectedUuid === animal.uuid}
+                            onClick={() => openDeleteDialog(brand.uuid)}
+                            isLoading={deleteMutation.isPending && selectedUuid === brand.uuid}
                           />
                         </HStack>
                       </Td>

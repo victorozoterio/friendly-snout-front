@@ -8,3 +8,8 @@ export const typingBrazilianDateMask = (value: string): string => {
   if (v.length >= 3) return v.replace(/^(\d{2})(\d{0,2}).*$/, '$1/$2');
   return v;
 };
+
+export const formatToBrazilianDateMask = (value: string | Date): string => {
+  const date = typeof value === 'string' ? new Date(value) : value;
+  return date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+};

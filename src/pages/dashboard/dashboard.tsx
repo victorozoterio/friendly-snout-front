@@ -38,6 +38,8 @@ export const Dashboard = () => {
         </Button>
 
         <Button
+          as={Link}
+          to={ROUTES.MEDICINE_BRANDS.BASE}
           bg='primary'
           color='white'
           borderRadius='full'
@@ -47,7 +49,7 @@ export const Dashboard = () => {
           _active={{ bg: 'secondary' }}
         >
           <HStack spacing={2}>
-            <Text fontWeight='bold'>Produtos</Text>
+            <Text fontWeight='bold'>Marcas</Text>
             <Box as='img' src={Paws} alt='Patas' w='1.1rem' />
           </HStack>
         </Button>
