@@ -1,4 +1,12 @@
-import { AnimalBreed, AnimalColor, AnimalFivAndFelv, AnimalSex, AnimalSize, AnimalSpecies } from '../../../utils';
+import {
+  AnimalBreed,
+  AnimalColor,
+  AnimalFivAndFelv,
+  AnimalSex,
+  AnimalSize,
+  AnimalSpecies,
+  AnimalStatus,
+} from '../../../utils';
 
 export const findOption = <V extends string>(
   options: readonly SelectOption<V>[],
@@ -18,6 +26,7 @@ export type SelectOption<V extends string> = {
   value: V;
   label: string;
 };
+
 export const speciesOptions: readonly SelectOption<AnimalSpecies>[] = [
   { value: AnimalSpecies.DOG, label: 'Cachorro' },
   { value: AnimalSpecies.CAT, label: 'Gato' },
@@ -63,6 +72,13 @@ export const colorOptions: readonly SelectOption<AnimalColor>[] = [
   { value: AnimalColor.CREAM, label: 'Creme' },
   { value: AnimalColor.TAN, label: 'Caramelo' },
   { value: AnimalColor.SPECKLED, label: 'Malhado' },
+];
+
+export const statusOptions: readonly SelectOption<AnimalStatus>[] = [
+  { value: AnimalStatus.QUARANTINE, label: 'Quarentena' },
+  { value: AnimalStatus.SHELTERED, label: 'Abrigado' },
+  { value: AnimalStatus.ADOPTED, label: 'Adotado' },
+  { value: AnimalStatus.LOST, label: 'Perdido' },
 ];
 
 export const fivFelvOptions: readonly SelectOption<AnimalFivAndFelv>[] = [

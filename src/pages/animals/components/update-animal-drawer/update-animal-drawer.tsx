@@ -32,6 +32,7 @@ import {
   AnimalSex,
   AnimalSize,
   AnimalSpecies,
+  AnimalStatus,
   brazilianDateToIso,
   createSelectStyles,
   isoDateToBrazilian,
@@ -46,6 +47,7 @@ import {
   sexOptions,
   sizeOptions,
   speciesOptions,
+  statusOptions,
 } from '../../utils/options';
 import { UpdateAnimalFormData, updateAnimalSchema } from './schema';
 
@@ -63,6 +65,7 @@ export const UpdateAnimalDrawer = ({ isOpen, onClose, uuid }: AnimalDrawerProps)
     defaultValues: {
       name: '',
       birthDate: undefined,
+      status: AnimalStatus.QUARANTINE,
       microchip: undefined,
       rga: undefined,
       castrated: false,
@@ -90,6 +93,7 @@ export const UpdateAnimalDrawer = ({ isOpen, onClose, uuid }: AnimalDrawerProps)
         size: a.size as AnimalSize,
         color: a.color as AnimalColor,
         birthDate: isoDateToBrazilian(a.birthDate),
+        status: a.status as AnimalStatus,
         microchip: a.microchip ?? undefined,
         rga: a.rga ?? undefined,
         castrated: !!a.castrated,
@@ -323,44 +327,69 @@ export const UpdateAnimalDrawer = ({ isOpen, onClose, uuid }: AnimalDrawerProps)
                 </FormControl>
               </HStack>
 
-              <FormControl isInvalid={!!errors.birthDate} position='relative' pb='22px'>
-                <FormLabel mb={1} color='primary' fontWeight='bold' fontSize='sm'>
-                  Data de Nascimento
-                </FormLabel>
-                <Controller
-                  name='birthDate'
-                  control={control}
-                  render={({ field }) => (
-                    <Input
-                      type='text'
-                      inputMode='numeric'
-                      placeholder='dd/mm/aaaa'
-                      h='2.75rem'
-                      bg='white'
-                      border='1px solid'
-                      borderColor={errors.birthDate ? 'error' : 'inputBorder'}
-                      borderRadius='md'
-                      color='gray.900'
-                      fontWeight='medium'
-                      _hover={{ borderColor: errors.birthDate ? 'error' : 'primary' }}
-                      _focus={{
-                        borderColor: errors.birthDate ? 'error' : 'primary',
-                        outline: errors.birthDate
-                          ? '1px solid var(--chakra-colors-error)'
-                          : '1px solid var(--chakra-colors-primary)',
-                        outlineOffset: '0px',
-                      }}
-                      sx={{
-                        '&::-webkit-calendar-picker-indicator': { display: 'none' },
-                        '&::-webkit-inner-spin-button': { display: 'none' },
-                      }}
-                      value={field.value ?? ''}
-                      onChange={(e) => field.onChange(mask.typingBrazilianDate(e.target.value) || undefined)}
-                    />
-                  )}
-                />
-                <FormErrorInline message={errors.birthDate?.message as string | undefined} />
-              </FormControl>
+              <HStack spacing={4}>
+                <FormControl isInvalid={!!errors.birthDate} position='relative' pb='22px'>
+                  <FormLabel mb={1} color='primary' fontWeight='bold' fontSize='sm'>
+                    Data de Nascimento
+                  </FormLabel>
+                  <Controller
+                    name='birthDate'
+                    control={control}
+                    render={({ field }) => (
+                      <Input
+                        type='text'
+                        inputMode='numeric'
+                        placeholder='dd/mm/aaaa'
+                        h='2.75rem'
+                        bg='white'
+                        border='1px solid'
+                        borderColor={errors.birthDate ? 'error' : 'inputBorder'}
+                        borderRadius='md'
+                        color='gray.900'
+                        fontWeight='medium'
+                        _hover={{ borderColor: errors.birthDate ? 'error' : 'primary' }}
+                        _focus={{
+                          borderColor: errors.birthDate ? 'error' : 'primary',
+                          outline: errors.birthDate
+                            ? '1px solid var(--chakra-colors-error)'
+                            : '1px solid var(--chakra-colors-primary)',
+                          outlineOffset: '0px',
+                        }}
+                        sx={{
+                          '&::-webkit-calendar-picker-indicator': { display: 'none' },
+                          '&::-webkit-inner-spin-button': { display: 'none' },
+                        }}
+                        value={field.value ?? ''}
+                        onChange={(e) => field.onChange(mask.typingBrazilianDate(e.target.value) || undefined)}
+                      />
+                    )}
+                  />
+                  <FormErrorInline message={errors.birthDate?.message as string | undefined} />
+                </FormControl>
+
+                <FormControl isInvalid={!!errors.status} position='relative' pb='22px'>
+                  <FormLabel mb={1} color='primary' fontWeight='bold' fontSize='sm'>
+                    Status *
+                  </FormLabel>
+
+                  <Controller
+                    name='status'
+                    control={control}
+                    render={({ field }) => (
+                      <ChakraSelect<{ value: AnimalStatus; label: string }, false>
+                        placeholder='Selecione'
+                        value={findOption(statusOptions, field.value)}
+                        onChange={(opt) => field.onChange(opt?.value)}
+                        options={statusOptions}
+                        isSearchable={false}
+                        chakraStyles={createSelectStyles<AnimalStatus>(!!errors.status)}
+                      />
+                    )}
+                  />
+
+                  <FormErrorInline message={errors.status?.message} />
+                </FormControl>
+              </HStack>
 
               <HStack spacing={4} align='flex-start' w='100%'>
                 <FormControl flex='1 1 0' minW={0} position='relative' pb='22px'>
