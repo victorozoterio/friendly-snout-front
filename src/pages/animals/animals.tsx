@@ -24,8 +24,7 @@ import Paws from '../../assets/paws.png';
 import { DeleteConfirmDialog, Header, PaginationFooter, TableSortableHeader } from '../../components';
 import { deleteAnimal, getAllAnimals } from '../../services';
 import { GetAnimalResponse } from '../../services/animals/types';
-import { Pagination } from '../../utils';
-import { FivAndFelvBadge, YesNoBadge } from './components/badges';
+import { mask, Pagination } from '../../utils';
 import { CreateAnimalDrawer } from './components/create-animal-drawer';
 import { UpdateAnimalDrawer } from './components/update-animal-drawer';
 import { applySort, DEFAULT_SORT_BY, DEFAULT_SORT_STATE, SortableKey, SortState } from './utils/sort';
@@ -225,16 +224,16 @@ export const Animals = () => {
                 <Thead bg='secondary'>
                   <Tr>
                     <TableSortableHeader
-                      w='10%'
+                      w='11%'
                       sortKey='status'
                       sortState={sortState}
                       onSort={(key) => handleSortClick(key as SortableKey)}
                     >
-                      Status
+                      Estágio
                     </TableSortableHeader>
 
                     <TableSortableHeader
-                      w='22%'
+                      w='26%'
                       sortKey='name'
                       sortState={sortState}
                       onSort={(key) => handleSortClick(key as SortableKey)}
@@ -243,7 +242,7 @@ export const Animals = () => {
                     </TableSortableHeader>
 
                     <TableSortableHeader
-                      w='10%'
+                      w='12%'
                       sortKey='species'
                       sortState={sortState}
                       onSort={(key) => handleSortClick(key as SortableKey)}
@@ -252,7 +251,7 @@ export const Animals = () => {
                     </TableSortableHeader>
 
                     <TableSortableHeader
-                      w='10%'
+                      w='12%'
                       sortKey='breed'
                       sortState={sortState}
                       onSort={(key) => handleSortClick(key as SortableKey)}
@@ -261,7 +260,7 @@ export const Animals = () => {
                     </TableSortableHeader>
 
                     <TableSortableHeader
-                      w='8%'
+                      w='12%'
                       sortKey='size'
                       sortState={sortState}
                       onSort={(key) => handleSortClick(key as SortableKey)}
@@ -270,33 +269,15 @@ export const Animals = () => {
                     </TableSortableHeader>
 
                     <TableSortableHeader
-                      w='8%'
-                      sortKey='castrated'
+                      w='20%'
+                      sortKey='createdAt'
                       sortState={sortState}
                       onSort={(key) => handleSortClick(key as SortableKey)}
                     >
-                      Castrado
+                      Criado em
                     </TableSortableHeader>
 
-                    <TableSortableHeader
-                      w='12%'
-                      sortKey='fiv'
-                      sortState={sortState}
-                      onSort={(key) => handleSortClick(key as SortableKey)}
-                    >
-                      FIV
-                    </TableSortableHeader>
-
-                    <TableSortableHeader
-                      w='12%'
-                      sortKey='felv'
-                      sortState={sortState}
-                      onSort={(key) => handleSortClick(key as SortableKey)}
-                    >
-                      FELV
-                    </TableSortableHeader>
-
-                    <Th w='8%' color='white' textAlign='right' pr={12}>
+                    <Th w='9%' color='white' textAlign='right' pr={10}>
                       Ações
                     </Th>
                   </Tr>
@@ -325,16 +306,8 @@ export const Animals = () => {
                         <Text isTruncated>{animal.size}</Text>
                       </Td>
 
-                      <Td>
-                        <YesNoBadge value={animal.castrated} />
-                      </Td>
-
-                      <Td>
-                        <FivAndFelvBadge value={animal.fiv} />
-                      </Td>
-
-                      <Td>
-                        <FivAndFelvBadge value={animal.felv} />
+                      <Td color='white' fontWeight='bold'>
+                        <Text isTruncated>{mask.formatToBrazilianDate(animal.createdAt)}</Text>
                       </Td>
 
                       <Td>
