@@ -171,7 +171,13 @@ export const CreateMedicineDrawer = ({ isOpen, onClose }: CreateMedicineDrawerPr
                 placeholder='0'
                 {...inputStyles}
                 borderColor={errors.quantity ? 'error' : 'inputBorder'}
-                {...register('quantity')}
+                {...register('quantity', {
+                  setValueAs: (value) => {
+                    if (value === null || value === '') return undefined;
+                    const number = Number(value);
+                    return !Number.isNaN(number) ? number : undefined;
+                  },
+                })}
               />
               <Text fontSize='xs' color='gray.500' mt={1}>
                 Use -1 para estoque infinito
