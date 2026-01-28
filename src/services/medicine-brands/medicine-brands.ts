@@ -29,7 +29,7 @@ export const getMedicineBrandByUuid = async (uuid: string) => {
 };
 
 export const updateMedicineBrand = async (uuid: string, { name }: T.UpdateMedicineBrandRequest) => {
-  const { data } = await api.put(`/medicine-brands/${uuid}`, {
+  const { data } = await api.patch(`/medicine-brands/${uuid}`, {
     name,
   });
 

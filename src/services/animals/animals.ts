@@ -78,7 +78,7 @@ export const updateAnimal = async (
     notes,
   }: T.UpdateAnimalRequest,
 ) => {
-  const { data } = await api.put(`/animals/${uuid}`, {
+  const { data } = await api.patch(`/animals/${uuid}`, {
     name,
     sex,
     species,
