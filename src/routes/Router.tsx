@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import { Animals, Dashboard, ForgotPassword, SignIn } from '../pages';
+import { MedicineBrands } from '../pages/medicine-brands';
 import { Medicines } from '../pages/medicines';
-import { MedicineBrands } from '../pages/medicines-brands';
 import { ProtectedRoute, ROUTES } from './';
 
 export function Router() {

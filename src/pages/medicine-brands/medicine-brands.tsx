@@ -86,7 +86,7 @@ export const MedicineBrands = () => {
         toast({
           title: 'Não foi possível excluir a marca',
           description:
-            'Esta marca possui medicamentos ativos vinculados. Remova/Desative os medicamentos antes de excluir a marca.',
+            'Esta marca possui medicamentos ativos vinculados. Remova/Desative os medicamentos antes de excluí-la.',
           status: 'warning',
           duration: 5000,
           isClosable: true,
