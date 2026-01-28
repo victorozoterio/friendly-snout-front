@@ -327,14 +327,6 @@ export const Medicines = () => {
                       Quantidade
                     </TableSortableHeader>
                     <TableSortableHeader
-                      w='14%'
-                      sortKey='isActive'
-                      sortState={sortState}
-                      onSort={(key) => handleSortClick(key as SortableKey)}
-                    >
-                      Status
-                    </TableSortableHeader>
-                    <TableSortableHeader
                       w='20%'
                       sortKey='createdAt'
                       sortState={sortState}
@@ -342,6 +334,9 @@ export const Medicines = () => {
                     >
                       Criado em
                     </TableSortableHeader>
+                    <Th w='14%' color='white'>
+                      Status
+                    </Th>
                     <Th w='20%' color='white' textAlign='right' pr={16}>
                       Ações
                     </Th>
@@ -356,13 +351,13 @@ export const Medicines = () => {
                       <Td color='white' fontWeight='bold'>
                         <Text isTruncated>{medicine.quantity === -1 ? '∞' : medicine.quantity}</Text>
                       </Td>
+                      <Td color='white' fontWeight='bold'>
+                        <Text isTruncated>{mask.formatToBrazilianDate(medicine.createdAt)}</Text>
+                      </Td>
                       <Td color={medicine.isActive ? 'success' : 'error'} fontWeight='bold'>
                         <Text isTruncated textTransform='capitalize'>
                           {medicine.isActive ? 'Ativo' : 'Inativo'}
                         </Text>
-                      </Td>
-                      <Td color='white' fontWeight='bold'>
-                        <Text isTruncated>{mask.formatToBrazilianDate(medicine.createdAt)}</Text>
                       </Td>
                       <Td>
                         <HStack justify='flex-end' spacing={1}>
