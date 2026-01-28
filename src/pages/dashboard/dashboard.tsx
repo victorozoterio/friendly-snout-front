@@ -39,6 +39,23 @@ export const Dashboard = () => {
 
         <Button
           as={Link}
+          to={ROUTES.MEDICINES.BASE}
+          bg='primary'
+          color='white'
+          borderRadius='full'
+          px={6}
+          h='2.75rem'
+          _hover={{ bg: 'secondary' }}
+          _active={{ bg: 'secondary' }}
+        >
+          <HStack spacing={2}>
+            <Text fontWeight='bold'>Medicamentos</Text>
+            <Box as='img' src={Paws} alt='Patas' w='1.1rem' />
+          </HStack>
+        </Button>
+
+        <Button
+          as={Link}
           to={ROUTES.MEDICINE_BRANDS.BASE}
           bg='primary'
           color='white'

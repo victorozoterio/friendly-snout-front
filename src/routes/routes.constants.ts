@@ -9,6 +9,9 @@ export const ROUTES = {
   ANIMALS: {
     BASE: '/animals',
   },
+  MEDICINES: {
+    BASE: '/medicines',
+  },
   MEDICINE_BRANDS: {
     BASE: '/medicine-brands',
   },
