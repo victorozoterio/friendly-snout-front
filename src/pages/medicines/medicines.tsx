@@ -14,9 +14,11 @@ import {
   Thead,
   Tr,
   useDisclosure,
+  useToast,
   VStack,
 } from '@chakra-ui/react';
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { AxiosError, AxiosResponse } from 'axios';
 import { MagnifyingGlass, NotePencil, Power, Trash } from 'phosphor-react';
 import * as React from 'react';
 import {
@@ -71,12 +73,44 @@ export const Medicines = () => {
     placeholderData: keepPreviousData,
   });
 
+  const toast = useToast();
+
   const deleteMutation = useMutation({
     mutationFn: deleteMedicine,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['medicines', 'list'] });
       onDeleteClose();
       setSelectedUuid(null);
+
+      toast({
+        title: 'Medicamento excluído com sucesso',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+        position: 'top-right',
+      });
+    },
+    onError: (error: AxiosError<AxiosResponse>) => {
+      if (error.response?.status === 409) {
+        toast({
+          title: 'Não foi possível excluir o medicamento',
+          description: 'Foram feitas aplicações com este medicamento. Remova as aplicações antes de excluí-lo.',
+          status: 'warning',
+          duration: 5000,
+          isClosable: true,
+          position: 'top-right',
+        });
+        return;
+      }
+
+      toast({
+        title: 'Erro ao excluir o medicamento',
+        description: 'Não foi possível excluir o medicamento. Tente novamente mais tarde.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'top-right',
+      });
     },
   });
 
