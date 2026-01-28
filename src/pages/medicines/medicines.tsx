@@ -354,7 +354,7 @@ export const Medicines = () => {
                         <Text isTruncated>{medicine.name}</Text>
                       </Td>
                       <Td color='white' fontWeight='bold'>
-                        <Text isTruncated>{medicine.quantity ?? '-'}</Text>
+                        <Text isTruncated>{medicine.quantity === -1 ? '∞' : medicine.quantity}</Text>
                       </Td>
                       <Td color={medicine.isActive ? 'success' : 'error'} fontWeight='bold'>
                         <Text isTruncated textTransform='capitalize'>
