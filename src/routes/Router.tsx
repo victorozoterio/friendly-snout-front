@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
-import { Animals, Dashboard, ForgotPassword, SignIn } from '../pages';
+import { Animals, Attachments, Dashboard, ForgotPassword, SignIn } from '../pages';
 import { MedicineBrands } from '../pages/medicine-brands';
 import { Medicines } from '../pages/medicines';
 import { ProtectedRoute, ROUTES } from './';
@@ -36,6 +36,14 @@ export function Router() {
         element={
           <ProtectedRoute>
             <Animals />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path={ROUTES.ANIMALS.ATTACHMENTS}
+        element={
+          <ProtectedRoute>
+            <Attachments />
           </ProtectedRoute>
         }
       />

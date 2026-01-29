@@ -20,8 +20,10 @@ import {
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Files, FirstAidKit, MagnifyingGlass, NotePencil, Trash } from 'phosphor-react';
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 import Paws from '../../assets/paws.png';
 import { DeleteConfirmDialog, Header, PaginationFooter, TableSortableHeader } from '../../components';
+import { getAnimalAttachmentsPath } from '../../routes';
 import { deleteAnimal, getAllAnimals } from '../../services';
 import { GetAnimalResponse } from '../../services/animals/types';
 import { mask, Pagination } from '../../utils';
@@ -321,11 +323,13 @@ export const Animals = () => {
                           />
 
                           <IconButton
+                            as={Link}
+                            to={getAnimalAttachmentsPath(animal.uuid)}
                             aria-label='Anexos'
                             icon={<Files size={20} />}
                             variant='link'
-                            color='blue.200'
-                            _hover={{ color: 'blue.300', transform: 'scale(1.1)' }}
+                            color='green.400'
+                            _hover={{ color: 'green.500', transform: 'scale(1.1)' }}
                           />
 
                           <IconButton
