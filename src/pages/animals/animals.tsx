@@ -18,7 +18,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { MagnifyingGlass, NotePencil, Trash } from 'phosphor-react';
+import { Files, FirstAidKit, MagnifyingGlass, NotePencil, Trash } from 'phosphor-react';
 import * as React from 'react';
 import Paws from '../../assets/paws.png';
 import { DeleteConfirmDialog, Header, PaginationFooter, TableSortableHeader } from '../../components';
@@ -269,7 +269,7 @@ export const Animals = () => {
                     </TableSortableHeader>
 
                     <TableSortableHeader
-                      w='20%'
+                      w='18%'
                       sortKey='createdAt'
                       sortState={sortState}
                       onSort={(key) => handleSortClick(key as SortableKey)}
@@ -277,7 +277,7 @@ export const Animals = () => {
                       Criado em
                     </TableSortableHeader>
 
-                    <Th w='9%' color='white' textAlign='right' pr={10}>
+                    <Th w='11%' color='white' textAlign='left'>
                       Ações
                     </Th>
                   </Tr>
@@ -311,12 +311,29 @@ export const Animals = () => {
                       </Td>
 
                       <Td>
-                        <HStack justify='flex-end' spacing={1}>
+                        <HStack justify='flex-end' spacing={0}>
+                          <IconButton
+                            aria-label='Tratamentos'
+                            icon={<FirstAidKit size={20} />}
+                            variant='link'
+                            color='green.400'
+                            _hover={{ color: 'green.500', transform: 'scale(1.1)' }}
+                          />
+
+                          <IconButton
+                            aria-label='Anexos'
+                            icon={<Files size={20} />}
+                            variant='link'
+                            color='blue.200'
+                            _hover={{ color: 'blue.300', transform: 'scale(1.1)' }}
+                          />
+
                           <IconButton
                             aria-label='Editar'
                             icon={<NotePencil size={20} />}
                             variant='link'
-                            color='white'
+                            color='orange.400'
+                            _hover={{ color: 'orange.500', transform: 'scale(1.1)' }}
                             onClick={() => openUpdateDrawer(animal.uuid)}
                           />
 
@@ -324,7 +341,8 @@ export const Animals = () => {
                             aria-label='Excluir'
                             icon={<Trash size={20} />}
                             variant='link'
-                            color='white'
+                            color='red.400'
+                            _hover={{ color: 'red.500', transform: 'scale(1.1)' }}
                             onClick={() => openDeleteDialog(animal.uuid)}
                             isLoading={deleteMutation.isPending && selectedUuid === animal.uuid}
                           />

@@ -337,7 +337,7 @@ export const Medicines = () => {
                     <Th w='14%' color='white'>
                       Status
                     </Th>
-                    <Th w='20%' color='white' textAlign='right' pr={16}>
+                    <Th w='20%' color='white' textAlign='right' pr={14}>
                       Ações
                     </Th>
                   </Tr>
@@ -354,18 +354,19 @@ export const Medicines = () => {
                       <Td color='white' fontWeight='bold'>
                         <Text isTruncated>{mask.formatToBrazilianDate(medicine.createdAt)}</Text>
                       </Td>
-                      <Td color={medicine.isActive ? 'success' : 'error'} fontWeight='bold'>
+                      <Td color={medicine.isActive ? 'green.400' : 'red.400'} fontWeight='bold'>
                         <Text isTruncated textTransform='capitalize'>
                           {medicine.isActive ? 'Ativo' : 'Inativo'}
                         </Text>
                       </Td>
                       <Td>
-                        <HStack justify='flex-end' spacing={1}>
+                        <HStack justify='flex-end' spacing={0}>
                           <IconButton
                             aria-label={medicine.isActive ? 'Inativar' : 'Ativar'}
                             icon={<Power size={20} />}
                             variant='link'
-                            color='white'
+                            color='blue.200'
+                            _hover={{ color: 'blue.300', transform: 'scale(1.1)' }}
                             onClick={() =>
                               medicine.isActive
                                 ? openDeactivateDialog(medicine.uuid)
@@ -377,18 +378,22 @@ export const Medicines = () => {
                                 : activateMutation.isPending && powerUuid === medicine.uuid
                             }
                           />
+
                           <IconButton
                             aria-label='Editar'
                             icon={<NotePencil size={20} />}
                             variant='link'
-                            color='white'
+                            color='orange.400'
+                            _hover={{ color: 'orange.500', transform: 'scale(1.1)' }}
                             onClick={() => openUpdateDrawer(medicine.uuid)}
                           />
+
                           <IconButton
                             aria-label='Excluir'
                             icon={<Trash size={20} />}
                             variant='link'
-                            color='white'
+                            color='red.400'
+                            _hover={{ color: 'red.500', transform: 'scale(1.1)' }}
                             onClick={() => openDeleteDialog(medicine.uuid)}
                             isLoading={deleteMutation.isPending && selectedUuid === medicine.uuid}
                           />

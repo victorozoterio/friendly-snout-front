@@ -244,7 +244,7 @@ export const MedicineBrands = () => {
                     >
                       Criado em
                     </TableSortableHeader>
-                    <Th w='16%' color='white' textAlign='right' pr={12}>
+                    <Th w='16%' color='white' textAlign='right' pr={10}>
                       Ações
                     </Th>
                   </Tr>
@@ -259,19 +259,22 @@ export const MedicineBrands = () => {
                         <Text isTruncated>{mask.formatToBrazilianDate(brand.createdAt)}</Text>
                       </Td>
                       <Td>
-                        <HStack justify='flex-end' spacing={1}>
+                        <HStack justify='flex-end' spacing={0}>
                           <IconButton
                             aria-label='Editar'
                             icon={<NotePencil size={20} />}
                             variant='link'
-                            color='white'
+                            color='orange.400'
+                            _hover={{ color: 'orange.500', transform: 'scale(1.1)' }}
                             onClick={() => openUpdateDrawer(brand.uuid)}
                           />
+
                           <IconButton
                             aria-label='Excluir'
                             icon={<Trash size={20} />}
                             variant='link'
-                            color='white'
+                            color='red.400'
+                            _hover={{ color: 'red.500', transform: 'scale(1.1)' }}
                             onClick={() => openDeleteDialog(brand.uuid)}
                             isLoading={deleteMutation.isPending && selectedUuid === brand.uuid}
                           />
