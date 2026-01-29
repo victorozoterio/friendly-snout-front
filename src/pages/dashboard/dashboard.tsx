@@ -1,6 +1,8 @@
 import { Box, Button, HStack, Spinner, Text, VStack } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
+import BrandedMedicine from '../../assets/branded-medicine.png';
+import Medicine from '../../assets/medicine.png';
 import Paws from '../../assets/paws.png';
 import { Header } from '../../components';
 import { ROUTES } from '../../routes';
@@ -50,7 +52,7 @@ export const Dashboard = () => {
         >
           <HStack spacing={2}>
             <Text fontWeight='bold'>Medicamentos</Text>
-            <Box as='img' src={Paws} alt='Patas' w='1.1rem' />
+            <Box as='img' src={Medicine} alt='Medicamento' w='1.1rem' />
           </HStack>
         </Button>
 
@@ -67,7 +69,7 @@ export const Dashboard = () => {
         >
           <HStack spacing={2}>
             <Text fontWeight='bold'>Marcas</Text>
-            <Box as='img' src={Paws} alt='Patas' w='1.1rem' />
+            <Box as='img' src={BrandedMedicine} alt='Medicamento com marca' w='1.1rem' />
           </HStack>
         </Button>
       </Header>

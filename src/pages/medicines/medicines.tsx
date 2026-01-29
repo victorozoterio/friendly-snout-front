@@ -21,6 +21,7 @@ import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tansta
 import { AxiosError, AxiosResponse } from 'axios';
 import { MagnifyingGlass, NotePencil, Power, Trash } from 'phosphor-react';
 import * as React from 'react';
+import Medicine from '../../assets/medicine.png';
 import {
   ActionConfirmDialog,
   DeleteConfirmDialog,
@@ -194,6 +195,10 @@ export const Medicines = () => {
     setEditUuid(null);
   };
 
+  const medicines = data?.data ?? [];
+  const hasData = medicines.length > 0;
+  const hasSearch = debouncedSearch.trim().length > 0;
+
   return (
     <Box minH='100vh' bg='background'>
       <Header>
@@ -226,6 +231,7 @@ export const Medicines = () => {
               onChange={(e) => setSearch(e.target.value)}
             />
           </Box>
+
           <Button
             bg='primary'
             color='white'
@@ -235,7 +241,10 @@ export const Medicines = () => {
             _hover={{ bg: 'secondary' }}
             onClick={onCreateDrawerOpen}
           >
-            <Text fontWeight='bold'>Cadastrar</Text>
+            <HStack spacing={2}>
+              <Text fontWeight='bold'>Cadastrar</Text>
+              <Box as='img' src={Medicine} alt='Medicamento' w='1.1rem' />
+            </HStack>
           </Button>
         </HStack>
       </Header>
@@ -306,6 +315,7 @@ export const Medicines = () => {
               border='1px solid'
               borderColor='background'
               backdropFilter='blur(6px)'
+              overflow='hidden'
             >
               <Table w='100%' layout='fixed'>
                 <Thead bg='secondary'>
@@ -318,6 +328,7 @@ export const Medicines = () => {
                     >
                       Nome
                     </TableSortableHeader>
+
                     <TableSortableHeader
                       w='12%'
                       sortKey='quantity'
@@ -326,6 +337,7 @@ export const Medicines = () => {
                     >
                       Quantidade
                     </TableSortableHeader>
+
                     <TableSortableHeader
                       w='20%'
                       sortKey='createdAt'
@@ -334,78 +346,109 @@ export const Medicines = () => {
                     >
                       Criado em
                     </TableSortableHeader>
+
                     <Th w='14%' color='white'>
                       Status
                     </Th>
+
                     <Th w='20%' color='white' textAlign='right' pr={14}>
                       Ações
                     </Th>
                   </Tr>
                 </Thead>
+
                 <Tbody>
-                  {data?.data.map((medicine) => (
-                    <Tr key={medicine.uuid} bg='primary'>
-                      <Td color='white' fontWeight='bold' textTransform='capitalize'>
-                        <Text isTruncated>{medicine.name}</Text>
-                      </Td>
-                      <Td color='white' fontWeight='bold'>
-                        <Text isTruncated>{medicine.quantity === -1 ? '∞' : medicine.quantity}</Text>
-                      </Td>
-                      <Td color='white' fontWeight='bold'>
-                        <Text isTruncated>{mask.formatToBrazilianDate(medicine.createdAt)}</Text>
-                      </Td>
-                      <Td color={medicine.isActive ? 'green.400' : 'red.400'} fontWeight='bold'>
-                        <Text isTruncated textTransform='capitalize'>
-                          {medicine.isActive ? 'Ativo' : 'Inativo'}
-                        </Text>
-                      </Td>
-                      <Td>
-                        <HStack justify='flex-end' spacing={0}>
-                          <IconButton
-                            aria-label={medicine.isActive ? 'Inativar' : 'Ativar'}
-                            icon={<Power size={20} />}
-                            variant='link'
-                            color='blue.200'
-                            _hover={{ color: 'blue.300', transform: 'scale(1.1)' }}
-                            onClick={() =>
-                              medicine.isActive
-                                ? openDeactivateDialog(medicine.uuid)
-                                : openActivateDialog(medicine.uuid)
-                            }
-                            isLoading={
-                              medicine.isActive
-                                ? deactivateMutation.isPending && powerUuid === medicine.uuid
-                                : activateMutation.isPending && powerUuid === medicine.uuid
-                            }
-                          />
+                  {!hasData ? (
+                    <Tr>
+                      <Td colSpan={5} p={0}>
+                        <VStack py={12} spacing={3}>
+                          <Box>
+                            <Box as='img' src={Medicine} alt='Medicamento' w='48px' opacity={0.9} />
+                          </Box>
 
-                          <IconButton
-                            aria-label='Editar'
-                            icon={<NotePencil size={20} />}
-                            variant='link'
-                            color='orange.400'
-                            _hover={{ color: 'orange.500', transform: 'scale(1.1)' }}
-                            onClick={() => openUpdateDrawer(medicine.uuid)}
-                          />
+                          <VStack spacing={1}>
+                            <Text fontWeight='bold' color='primary'>
+                              {hasSearch ? 'Nenhum medicamento encontrado' : 'Nenhum medicamento cadastrado ainda'}
+                            </Text>
 
-                          <IconButton
-                            aria-label='Excluir'
-                            icon={<Trash size={20} />}
-                            variant='link'
-                            color='red.400'
-                            _hover={{ color: 'red.500', transform: 'scale(1.1)' }}
-                            onClick={() => openDeleteDialog(medicine.uuid)}
-                            isLoading={deleteMutation.isPending && selectedUuid === medicine.uuid}
-                          />
-                        </HStack>
+                            <Text color='gray.600' fontSize='sm' textAlign='center' maxW='520px'>
+                              {hasSearch
+                                ? 'Tente ajustar o termo da busca ou limpe o filtro.'
+                                : 'Clique em “Cadastrar” para adicionar o primeiro medicamento.'}
+                            </Text>
+                          </VStack>
+                        </VStack>
                       </Td>
                     </Tr>
-                  ))}
+                  ) : (
+                    medicines.map((medicine) => (
+                      <Tr key={medicine.uuid} bg='primary'>
+                        <Td color='white' fontWeight='bold' textTransform='capitalize'>
+                          <Text isTruncated>{medicine.name}</Text>
+                        </Td>
+
+                        <Td color='white' fontWeight='bold'>
+                          <Text isTruncated>{medicine.quantity === -1 ? '∞' : medicine.quantity}</Text>
+                        </Td>
+
+                        <Td color='white' fontWeight='bold'>
+                          <Text isTruncated>{mask.formatToBrazilianDate(medicine.createdAt)}</Text>
+                        </Td>
+
+                        <Td color={medicine.isActive ? 'green.400' : 'red.400'} fontWeight='bold'>
+                          <Text isTruncated textTransform='capitalize'>
+                            {medicine.isActive ? 'Ativo' : 'Inativo'}
+                          </Text>
+                        </Td>
+
+                        <Td>
+                          <HStack justify='flex-end' spacing={0}>
+                            <IconButton
+                              aria-label={medicine.isActive ? 'Inativar' : 'Ativar'}
+                              icon={<Power size={20} />}
+                              variant='link'
+                              color='gray.200'
+                              _hover={{ color: 'gray.300', transform: 'scale(1.1)' }}
+                              onClick={() =>
+                                medicine.isActive
+                                  ? openDeactivateDialog(medicine.uuid)
+                                  : openActivateDialog(medicine.uuid)
+                              }
+                              isLoading={
+                                medicine.isActive
+                                  ? deactivateMutation.isPending && powerUuid === medicine.uuid
+                                  : activateMutation.isPending && powerUuid === medicine.uuid
+                              }
+                            />
+
+                            <IconButton
+                              aria-label='Editar'
+                              icon={<NotePencil size={20} />}
+                              variant='link'
+                              color='orange.400'
+                              _hover={{ color: 'orange.500', transform: 'scale(1.1)' }}
+                              onClick={() => openUpdateDrawer(medicine.uuid)}
+                            />
+
+                            <IconButton
+                              aria-label='Excluir'
+                              icon={<Trash size={20} />}
+                              variant='link'
+                              color='red.400'
+                              _hover={{ color: 'red.500', transform: 'scale(1.1)' }}
+                              onClick={() => openDeleteDialog(medicine.uuid)}
+                              isLoading={deleteMutation.isPending && selectedUuid === medicine.uuid}
+                            />
+                          </HStack>
+                        </Td>
+                      </Tr>
+                    ))
+                  )}
                 </Tbody>
               </Table>
             </TableContainer>
 
-            {data && (
+            {data && hasData && (
               <HStack mt={6} justify='flex-end'>
                 <PaginationFooter
                   page={data.meta.currentPage}

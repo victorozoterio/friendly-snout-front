@@ -21,6 +21,7 @@ import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tansta
 import { AxiosError, AxiosResponse } from 'axios';
 import { MagnifyingGlass, NotePencil, Trash } from 'phosphor-react';
 import * as React from 'react';
+import BrandedMedicine from '../../assets/branded-medicine.png';
 import { DeleteConfirmDialog, Header, PaginationFooter, TableSortableHeader } from '../../components';
 import { deleteMedicineBrand, getAllMedicineBrands } from '../../services';
 import type { GetMedicineBrandResponse } from '../../services/medicine-brands/types';
@@ -136,6 +137,10 @@ export const MedicineBrands = () => {
     setEditUuid(null);
   };
 
+  const brands = data?.data ?? [];
+  const hasData = brands.length > 0;
+  const hasSearch = debouncedSearch.trim().length > 0;
+
   return (
     <Box minH='100vh' bg='background'>
       <Header>
@@ -168,6 +173,7 @@ export const MedicineBrands = () => {
               onChange={(e) => setSearch(e.target.value)}
             />
           </Box>
+
           <Button
             bg='primary'
             color='white'
@@ -177,7 +183,10 @@ export const MedicineBrands = () => {
             _hover={{ bg: 'secondary' }}
             onClick={onCreateDrawerOpen}
           >
-            <Text fontWeight='bold'>Cadastrar</Text>
+            <HStack spacing={2}>
+              <Text fontWeight='bold'>Cadastrar</Text>
+              <Box as='img' src={BrandedMedicine} alt='Medicamento com marca' w='1.1rem' />
+            </HStack>
           </Button>
         </HStack>
       </Header>
@@ -191,6 +200,7 @@ export const MedicineBrands = () => {
       />
 
       <CreateMedicineBrandDrawer isOpen={isCreateDrawerOpen} onClose={onCreateDrawerClose} />
+
       <UpdateMedicineBrandDrawer
         isOpen={isUpdateDrawerOpen}
         onClose={handleCloseUpdateDrawer}
@@ -224,6 +234,7 @@ export const MedicineBrands = () => {
               border='1px solid'
               borderColor='background'
               backdropFilter='blur(6px)'
+              overflow='hidden'
             >
               <Table w='100%' layout='fixed'>
                 <Thead bg='secondary'>
@@ -236,6 +247,7 @@ export const MedicineBrands = () => {
                     >
                       Nome
                     </TableSortableHeader>
+
                     <TableSortableHeader
                       w='34%'
                       sortKey='createdAt'
@@ -244,49 +256,77 @@ export const MedicineBrands = () => {
                     >
                       Criado em
                     </TableSortableHeader>
+
                     <Th w='16%' color='white' textAlign='right' pr={10}>
                       Ações
                     </Th>
                   </Tr>
                 </Thead>
-                <Tbody>
-                  {data?.data.map((brand) => (
-                    <Tr key={brand.uuid} bg='primary'>
-                      <Td color='white' fontWeight='bold' textTransform='capitalize'>
-                        <Text isTruncated>{brand.name}</Text>
-                      </Td>
-                      <Td color='white' fontWeight='bold'>
-                        <Text isTruncated>{mask.formatToBrazilianDate(brand.createdAt)}</Text>
-                      </Td>
-                      <Td>
-                        <HStack justify='flex-end' spacing={0}>
-                          <IconButton
-                            aria-label='Editar'
-                            icon={<NotePencil size={20} />}
-                            variant='link'
-                            color='orange.400'
-                            _hover={{ color: 'orange.500', transform: 'scale(1.1)' }}
-                            onClick={() => openUpdateDrawer(brand.uuid)}
-                          />
 
-                          <IconButton
-                            aria-label='Excluir'
-                            icon={<Trash size={20} />}
-                            variant='link'
-                            color='red.400'
-                            _hover={{ color: 'red.500', transform: 'scale(1.1)' }}
-                            onClick={() => openDeleteDialog(brand.uuid)}
-                            isLoading={deleteMutation.isPending && selectedUuid === brand.uuid}
-                          />
-                        </HStack>
+                <Tbody>
+                  {!hasData ? (
+                    <Tr>
+                      <Td colSpan={3} p={0}>
+                        <VStack py={12} spacing={3}>
+                          <Box>
+                            <Box as='img' src={BrandedMedicine} alt='Medicamento com marca' w='48px' opacity={0.9} />
+                          </Box>
+
+                          <VStack spacing={1}>
+                            <Text fontWeight='bold' color='primary'>
+                              {hasSearch ? 'Nenhuma marca encontrada' : 'Nenhuma marca cadastrada ainda'}
+                            </Text>
+
+                            <Text color='gray.600' fontSize='sm' textAlign='center' maxW='520px'>
+                              {hasSearch
+                                ? 'Tente ajustar o termo da busca ou limpe o filtro.'
+                                : 'Clique em “Cadastrar” para adicionar a primeira marca de medicamento.'}
+                            </Text>
+                          </VStack>
+                        </VStack>
                       </Td>
                     </Tr>
-                  ))}
+                  ) : (
+                    brands.map((brand) => (
+                      <Tr key={brand.uuid} bg='primary'>
+                        <Td color='white' fontWeight='bold' textTransform='capitalize'>
+                          <Text isTruncated>{brand.name}</Text>
+                        </Td>
+
+                        <Td color='white' fontWeight='bold'>
+                          <Text isTruncated>{mask.formatToBrazilianDate(brand.createdAt)}</Text>
+                        </Td>
+
+                        <Td>
+                          <HStack justify='flex-end' spacing={0}>
+                            <IconButton
+                              aria-label='Editar'
+                              icon={<NotePencil size={20} />}
+                              variant='link'
+                              color='orange.400'
+                              _hover={{ color: 'orange.500', transform: 'scale(1.1)' }}
+                              onClick={() => openUpdateDrawer(brand.uuid)}
+                            />
+
+                            <IconButton
+                              aria-label='Excluir'
+                              icon={<Trash size={20} />}
+                              variant='link'
+                              color='red.400'
+                              _hover={{ color: 'red.500', transform: 'scale(1.1)' }}
+                              onClick={() => openDeleteDialog(brand.uuid)}
+                              isLoading={deleteMutation.isPending && selectedUuid === brand.uuid}
+                            />
+                          </HStack>
+                        </Td>
+                      </Tr>
+                    ))
+                  )}
                 </Tbody>
               </Table>
             </TableContainer>
 
-            {data && (
+            {data && hasData && (
               <HStack mt={6} justify='flex-end'>
                 <PaginationFooter
                   page={data.meta.currentPage}

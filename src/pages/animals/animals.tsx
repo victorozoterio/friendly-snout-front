@@ -213,170 +213,203 @@ export const Animals = () => {
           </VStack>
         )}
 
-        {!isLoading && !isError && (
-          <>
-            <TableContainer
-              bg='rgba(19,113,175,0.12)'
-              borderRadius='xl'
-              border='1px solid'
-              borderColor='background'
-              backdropFilter='blur(6px)'
-            >
-              <Table w='100%' layout='fixed'>
-                <Thead bg='secondary'>
-                  <Tr>
-                    <TableSortableHeader
-                      w='11%'
-                      sortKey='status'
-                      sortState={sortState}
-                      onSort={(key) => handleSortClick(key as SortableKey)}
-                    >
-                      Estágio
-                    </TableSortableHeader>
+        {!isLoading &&
+          !isError &&
+          (() => {
+            const animals = data?.data ?? [];
+            const hasData = animals.length > 0;
+            const hasSearch = debouncedSearch.trim().length > 0;
 
-                    <TableSortableHeader
-                      w='26%'
-                      sortKey='name'
-                      sortState={sortState}
-                      onSort={(key) => handleSortClick(key as SortableKey)}
-                    >
-                      Nome
-                    </TableSortableHeader>
+            return (
+              <>
+                <TableContainer
+                  bg='rgba(19,113,175,0.12)'
+                  borderRadius='xl'
+                  border='1px solid'
+                  borderColor='background'
+                  backdropFilter='blur(6px)'
+                  overflow='hidden'
+                >
+                  <Table w='100%' layout='fixed'>
+                    <Thead bg='secondary'>
+                      <Tr>
+                        <TableSortableHeader
+                          w='11%'
+                          sortKey='status'
+                          sortState={sortState}
+                          onSort={(key) => handleSortClick(key as SortableKey)}
+                        >
+                          Estágio
+                        </TableSortableHeader>
 
-                    <TableSortableHeader
-                      w='12%'
-                      sortKey='species'
-                      sortState={sortState}
-                      onSort={(key) => handleSortClick(key as SortableKey)}
-                    >
-                      Espécie
-                    </TableSortableHeader>
+                        <TableSortableHeader
+                          w='26%'
+                          sortKey='name'
+                          sortState={sortState}
+                          onSort={(key) => handleSortClick(key as SortableKey)}
+                        >
+                          Nome
+                        </TableSortableHeader>
 
-                    <TableSortableHeader
-                      w='12%'
-                      sortKey='breed'
-                      sortState={sortState}
-                      onSort={(key) => handleSortClick(key as SortableKey)}
-                    >
-                      Raça
-                    </TableSortableHeader>
+                        <TableSortableHeader
+                          w='12%'
+                          sortKey='species'
+                          sortState={sortState}
+                          onSort={(key) => handleSortClick(key as SortableKey)}
+                        >
+                          Espécie
+                        </TableSortableHeader>
 
-                    <TableSortableHeader
-                      w='12%'
-                      sortKey='size'
-                      sortState={sortState}
-                      onSort={(key) => handleSortClick(key as SortableKey)}
-                    >
-                      Porte
-                    </TableSortableHeader>
+                        <TableSortableHeader
+                          w='12%'
+                          sortKey='breed'
+                          sortState={sortState}
+                          onSort={(key) => handleSortClick(key as SortableKey)}
+                        >
+                          Raça
+                        </TableSortableHeader>
 
-                    <TableSortableHeader
-                      w='18%'
-                      sortKey='createdAt'
-                      sortState={sortState}
-                      onSort={(key) => handleSortClick(key as SortableKey)}
-                    >
-                      Criado em
-                    </TableSortableHeader>
+                        <TableSortableHeader
+                          w='12%'
+                          sortKey='size'
+                          sortState={sortState}
+                          onSort={(key) => handleSortClick(key as SortableKey)}
+                        >
+                          Porte
+                        </TableSortableHeader>
 
-                    <Th w='11%' color='white' textAlign='left'>
-                      Ações
-                    </Th>
-                  </Tr>
-                </Thead>
+                        <TableSortableHeader
+                          w='18%'
+                          sortKey='createdAt'
+                          sortState={sortState}
+                          onSort={(key) => handleSortClick(key as SortableKey)}
+                        >
+                          Criado em
+                        </TableSortableHeader>
 
-                <Tbody>
-                  {data?.data.map((animal) => (
-                    <Tr key={animal.uuid} bg='primary'>
-                      <Td color='white' fontWeight='bold' textTransform='capitalize'>
-                        <Text isTruncated>{animal.status}</Text>
-                      </Td>
+                        <Th w='11%' color='white' textAlign='left'>
+                          Ações
+                        </Th>
+                      </Tr>
+                    </Thead>
 
-                      <Td color='white' fontWeight='bold' textTransform='capitalize'>
-                        <Text isTruncated>{animal.name}</Text>
-                      </Td>
+                    <Tbody>
+                      {!hasData ? (
+                        <Tr>
+                          <Td colSpan={7} p={0}>
+                            <VStack py={12} spacing={3}>
+                              <Box color='primary'>
+                                <Box as='img' src={Paws} w='48px' opacity={0.9} />
+                              </Box>
 
-                      <Td color='white' fontWeight='bold' textTransform='capitalize'>
-                        <Text isTruncated>{animal.species}</Text>
-                      </Td>
+                              <VStack spacing={1}>
+                                <Text fontWeight='bold' color='primary'>
+                                  {hasSearch ? 'Nenhum animal encontrado' : 'Nenhum animal cadastrado ainda'}
+                                </Text>
 
-                      <Td color='white' fontWeight='bold' textTransform='capitalize'>
-                        <Text isTruncated>{animal.breed}</Text>
-                      </Td>
+                                <Text color='gray.600' fontSize='sm' textAlign='center' maxW='520px'>
+                                  {hasSearch
+                                    ? 'Tente ajustar o termo da busca ou limpe o filtro.'
+                                    : 'Clique em “Cadastrar” para adicionar o primeiro animal.'}
+                                </Text>
+                              </VStack>
+                            </VStack>
+                          </Td>
+                        </Tr>
+                      ) : (
+                        animals.map((animal) => (
+                          <Tr key={animal.uuid} bg='primary'>
+                            <Td color='white' fontWeight='bold' textTransform='capitalize'>
+                              <Text isTruncated>{animal.status}</Text>
+                            </Td>
 
-                      <Td color='white' fontWeight='bold' textTransform='capitalize'>
-                        <Text isTruncated>{animal.size}</Text>
-                      </Td>
+                            <Td color='white' fontWeight='bold' textTransform='capitalize'>
+                              <Text isTruncated>{animal.name}</Text>
+                            </Td>
 
-                      <Td color='white' fontWeight='bold'>
-                        <Text isTruncated>{mask.formatToBrazilianDate(animal.createdAt)}</Text>
-                      </Td>
+                            <Td color='white' fontWeight='bold' textTransform='capitalize'>
+                              <Text isTruncated>{animal.species}</Text>
+                            </Td>
 
-                      <Td>
-                        <HStack justify='flex-end' spacing={0}>
-                          <IconButton
-                            aria-label='Tratamentos'
-                            icon={<FirstAidKit size={20} />}
-                            variant='link'
-                            color='green.400'
-                            _hover={{ color: 'green.500', transform: 'scale(1.1)' }}
-                          />
+                            <Td color='white' fontWeight='bold' textTransform='capitalize'>
+                              <Text isTruncated>{animal.breed}</Text>
+                            </Td>
 
-                          <IconButton
-                            as={Link}
-                            to={getAnimalAttachmentsPath(animal.uuid)}
-                            aria-label='Anexos'
-                            icon={<Files size={20} />}
-                            variant='link'
-                            color='green.400'
-                            _hover={{ color: 'green.500', transform: 'scale(1.1)' }}
-                          />
+                            <Td color='white' fontWeight='bold' textTransform='capitalize'>
+                              <Text isTruncated>{animal.size}</Text>
+                            </Td>
 
-                          <IconButton
-                            aria-label='Editar'
-                            icon={<NotePencil size={20} />}
-                            variant='link'
-                            color='orange.400'
-                            _hover={{ color: 'orange.500', transform: 'scale(1.1)' }}
-                            onClick={() => openUpdateDrawer(animal.uuid)}
-                          />
+                            <Td color='white' fontWeight='bold'>
+                              <Text isTruncated>{mask.formatToBrazilianDate(animal.createdAt)}</Text>
+                            </Td>
 
-                          <IconButton
-                            aria-label='Excluir'
-                            icon={<Trash size={20} />}
-                            variant='link'
-                            color='red.400'
-                            _hover={{ color: 'red.500', transform: 'scale(1.1)' }}
-                            onClick={() => openDeleteDialog(animal.uuid)}
-                            isLoading={deleteMutation.isPending && selectedUuid === animal.uuid}
-                          />
-                        </HStack>
-                      </Td>
-                    </Tr>
-                  ))}
-                </Tbody>
-              </Table>
-            </TableContainer>
+                            <Td>
+                              <HStack justify='flex-end' spacing={0}>
+                                <IconButton
+                                  aria-label='Tratamentos'
+                                  icon={<FirstAidKit size={20} />}
+                                  variant='link'
+                                  color='green.400'
+                                  _hover={{ color: 'green.500', transform: 'scale(1.1)' }}
+                                />
 
-            {data && (
-              <HStack mt={6} justify='flex-end'>
-                <PaginationFooter
-                  page={data.meta.currentPage}
-                  limit={limit}
-                  totalItems={data.meta.totalItems}
-                  totalPages={data.meta.totalPages}
-                  isFetching={isFetching}
-                  onChangeLimit={(newLimit) => {
-                    setLimit(newLimit);
-                    setPage(1);
-                  }}
-                  onPrev={() => setPage((p) => Math.max(1, p - 1))}
-                  onNext={() => setPage((p) => p + 1)}
-                />
-              </HStack>
-            )}
-          </>
-        )}
+                                <IconButton
+                                  as={Link}
+                                  to={getAnimalAttachmentsPath(animal.uuid)}
+                                  aria-label='Anexos'
+                                  icon={<Files size={20} />}
+                                  variant='link'
+                                  color='gray.200'
+                                  _hover={{ color: 'gray.300', transform: 'scale(1.1)' }}
+                                />
+
+                                <IconButton
+                                  aria-label='Editar'
+                                  icon={<NotePencil size={20} />}
+                                  variant='link'
+                                  color='orange.400'
+                                  _hover={{ color: 'orange.500', transform: 'scale(1.1)' }}
+                                  onClick={() => openUpdateDrawer(animal.uuid)}
+                                />
+
+                                <IconButton
+                                  aria-label='Excluir'
+                                  icon={<Trash size={20} />}
+                                  variant='link'
+                                  color='red.400'
+                                  _hover={{ color: 'red.500', transform: 'scale(1.1)' }}
+                                  onClick={() => openDeleteDialog(animal.uuid)}
+                                  isLoading={deleteMutation.isPending && selectedUuid === animal.uuid}
+                                />
+                              </HStack>
+                            </Td>
+                          </Tr>
+                        ))
+                      )}
+                    </Tbody>
+                  </Table>
+                </TableContainer>
+
+                {data && hasData && (
+                  <HStack mt={6} justify='flex-end'>
+                    <PaginationFooter
+                      page={data.meta.currentPage}
+                      limit={limit}
+                      totalItems={data.meta.totalItems}
+                      totalPages={data.meta.totalPages}
+                      isFetching={isFetching}
+                      onChangeLimit={(newLimit) => {
+                        setLimit(newLimit);
+                        setPage(1);
+                      }}
+                      onPrev={() => setPage((p) => Math.max(1, p - 1))}
+                      onNext={() => setPage((p) => p + 1)}
+                    />
+                  </HStack>
+                )}
+              </>
+            );
+          })()}
       </Box>
     </Box>
   );
