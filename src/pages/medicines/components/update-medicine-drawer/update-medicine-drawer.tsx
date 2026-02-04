@@ -156,18 +156,21 @@ export const UpdateMedicineDrawer = ({ isOpen, onClose, uuid }: UpdateMedicineDr
         borderBottomRightRadius={0}
         boxShadow='xl'
       >
-        <DrawerCloseButton
-          color='primary'
-          size='lg'
-          borderRadius='full'
-          _hover={{ bg: 'gray.100' }}
-          _active={{ bg: 'gray.200' }}
-        />
-
         <DrawerHeader bg='background' py={6} px={8}>
-          <Text fontSize='xl' fontWeight='bold' color='primary'>
-            Editar medicamento
-          </Text>
+          <HStack justify='space-between' align='center'>
+            <Text fontSize='xl' fontWeight='bold' color='primary'>
+              Editar medicamento
+            </Text>
+
+            <DrawerCloseButton
+              position='static'
+              color='primary'
+              size='lg'
+              borderRadius='full'
+              _hover={{ bg: 'gray.100' }}
+              _active={{ bg: 'gray.200' }}
+            />
+          </HStack>
         </DrawerHeader>
 
         <DrawerBody px={8} py={6} bg='background' overflowY='auto' overflowX='hidden'>

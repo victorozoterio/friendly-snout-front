@@ -96,18 +96,21 @@ export const UpdateMedicineBrandDrawer = ({ isOpen, onClose, uuid }: UpdateMedic
         borderBottomRightRadius={0}
         boxShadow='xl'
       >
-        <DrawerCloseButton
-          color='primary'
-          size='lg'
-          borderRadius='full'
-          _hover={{ bg: 'gray.100' }}
-          _active={{ bg: 'gray.200' }}
-        />
-
         <DrawerHeader bg='background' py={6} px={8}>
-          <Text fontSize='xl' fontWeight='bold' color='primary'>
-            Editar marca de medicamento
-          </Text>
+          <HStack justify='space-between' align='center'>
+            <Text fontSize='xl' fontWeight='bold' color='primary'>
+              Editar marca de medicamento
+            </Text>
+
+            <DrawerCloseButton
+              position='static'
+              color='primary'
+              size='lg'
+              borderRadius='full'
+              _hover={{ bg: 'gray.100' }}
+              _active={{ bg: 'gray.200' }}
+            />
+          </HStack>
         </DrawerHeader>
 
         <DrawerBody px={8} py={6} bg='background' overflowY='auto' overflowX='hidden'>
@@ -125,7 +128,13 @@ export const UpdateMedicineBrandDrawer = ({ isOpen, onClose, uuid }: UpdateMedic
           )}
 
           {!isLoadingBrand && !isErrorBrand && brandQuery.data && (
-            <VStack as='form' id='update-medicine-brand-form' spacing={2} align='stretch' onSubmit={handleSubmit(onSubmit)}>
+            <VStack
+              as='form'
+              id='update-medicine-brand-form'
+              spacing={2}
+              align='stretch'
+              onSubmit={handleSubmit(onSubmit)}
+            >
               <FormControl isInvalid={!!errors.name} position='relative' pb='22px'>
                 <FormLabel mb={1} color='primary' fontWeight='bold' fontSize='sm'>
                   Nome *
