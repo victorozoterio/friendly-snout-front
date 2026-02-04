@@ -9,6 +9,7 @@ export const ROUTES = {
   ANIMALS: {
     BASE: '/animals',
     ATTACHMENTS: '/animals/:animalUuid/attachments',
+    MEDICINE_APPLICATIONS: '/animals/:animalUuid/medicine-applications',
   },
   MEDICINES: {
     BASE: '/medicines',
@@ -19,3 +20,4 @@ export const ROUTES = {
 } as const;
 
 export const getAnimalAttachmentsPath = (animalUuid: string) => `/animals/${animalUuid}/attachments`;
+export const getAnimalMedicineApplicationsPath = (animalUuid: string) => `/animals/${animalUuid}/medicine-applications`;

@@ -23,7 +23,7 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 import Paws from '../../assets/paws.png';
 import { DeleteConfirmDialog, Header, PaginationFooter, TableSortableHeader } from '../../components';
-import { getAnimalAttachmentsPath } from '../../routes';
+import { getAnimalAttachmentsPath, getAnimalMedicineApplicationsPath } from '../../routes';
 import { deleteAnimal, getAllAnimals } from '../../services';
 import { GetAnimalResponse } from '../../services/animals/types';
 import { mask, Pagination } from '../../utils';
@@ -287,7 +287,7 @@ export const Animals = () => {
                           Criado em
                         </TableSortableHeader>
 
-                        <Th w='11%' color='white' textAlign='left'>
+                        <Th w='11%' color='white' textAlign='right' pr={20}>
                           Ações
                         </Th>
                       </Tr>
@@ -346,6 +346,8 @@ export const Animals = () => {
                             <Td>
                               <HStack justify='flex-end' spacing={0}>
                                 <IconButton
+                                  as={Link}
+                                  to={getAnimalMedicineApplicationsPath(animal.uuid)}
                                   aria-label='Tratamentos'
                                   icon={<FirstAidKit size={20} />}
                                   variant='link'
