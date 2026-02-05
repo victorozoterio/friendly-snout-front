@@ -9,6 +9,9 @@ export const api = axios.create({
 
 // Adiciona o token de autenticação em todas as requisições
 api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+  if (!config.headers) return config;
+  config.headers['x-api-key'] = import.meta.env.VITE_API_KEY;
+
   if (config.url?.includes('/auth/refresh-token')) return config;
 
   const token = storage.token.getAccessToken();
