@@ -1,1 +1,1 @@
-export { FormErrorInline } from './form-error-inline';
+export * from './form-error-inline';

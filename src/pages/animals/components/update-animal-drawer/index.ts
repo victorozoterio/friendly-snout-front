@@ -1,1 +1,1 @@
-export { UpdateAnimalDrawer } from './update-animal-drawer';
+export * from './update-animal-drawer';

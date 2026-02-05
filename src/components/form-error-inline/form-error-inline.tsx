@@ -1,9 +1,6 @@
 import { FormErrorMessage, HStack, Text } from '@chakra-ui/react';
 import { XCircle } from 'phosphor-react';
-
-type FormErrorInlineProps = {
-  message?: string;
-};
+import { FormErrorInlineProps } from './types';
 
 export const FormErrorInline = ({ message }: FormErrorInlineProps) => {
   if (!message) return null;

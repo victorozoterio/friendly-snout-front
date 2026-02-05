@@ -1,1 +1,1 @@
-export { StageCard } from './stage-card';
+export * from './stage-card';

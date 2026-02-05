@@ -1,1 +1,1 @@
-export { CreateAnimalDrawer } from './create-animal-drawer';
+export * from './create-animal-drawer';
