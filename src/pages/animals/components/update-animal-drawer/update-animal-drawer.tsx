@@ -22,7 +22,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Select as ChakraSelect } from 'chakra-react-select';
 import * as React from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { FormErrorInline } from '../../../../components';
+import { FormErrorInline, PatternInput } from '../../../../components';
 import { getAnimalByUuid, updateAnimal } from '../../../../services';
 import type { GetAnimalResponse, UpdateAnimalRequest } from '../../../../services/animals/types';
 import {
@@ -36,7 +36,6 @@ import {
   brazilianDateToIso,
   createSelectStyles,
   isoDateToBrazilian,
-  mask,
 } from '../../../../utils';
 import {
   AnimalDrawerProps,
@@ -339,7 +338,7 @@ export const UpdateAnimalDrawer = ({ isOpen, onClose, uuid }: AnimalDrawerProps)
                     name='birthDate'
                     control={control}
                     render={({ field }) => (
-                      <Input
+                      <PatternInput
                         type='text'
                         inputMode='numeric'
                         placeholder='dd/mm/aaaa'
@@ -362,8 +361,10 @@ export const UpdateAnimalDrawer = ({ isOpen, onClose, uuid }: AnimalDrawerProps)
                           '&::-webkit-calendar-picker-indicator': { display: 'none' },
                           '&::-webkit-inner-spin-button': { display: 'none' },
                         }}
+                        format='##/##/####'
+                        mask='_'
                         value={field.value ?? ''}
-                        onChange={(e) => field.onChange(mask.typingBrazilianDate(e.target.value) || undefined)}
+                        onValueChange={(value) => field.onChange(value || undefined)}
                       />
                     )}
                   />

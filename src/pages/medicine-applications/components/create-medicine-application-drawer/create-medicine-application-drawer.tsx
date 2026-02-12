@@ -22,9 +22,9 @@ import { AxiosError } from 'axios';
 import { Select as ChakraSelect } from 'chakra-react-select';
 import * as React from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { FormErrorInline } from '../../../../components';
+import { FormErrorInline, PatternInput } from '../../../../components';
 import { createMedicineApplication, getAllMedicines } from '../../../../services';
-import { brazilianDateTimeToUtcIso, createSelectStyles, mask, MedicineApplicationFrequency } from '../../../../utils';
+import { brazilianDateTimeToUtcIso, createSelectStyles, MedicineApplicationFrequency } from '../../../../utils';
 import { CreateMedicineApplicationFormData, createMedicineApplicationSchema } from './schema';
 
 export type CreateMedicineApplicationDrawerProps = {
@@ -289,7 +289,7 @@ export const CreateMedicineApplicationDrawer = ({
                 name='appliedAt'
                 control={control}
                 render={({ field }) => (
-                  <Input
+                  <PatternInput
                     type='text'
                     inputMode='numeric'
                     placeholder='dd/mm/aaaa hh:mm'
@@ -299,8 +299,10 @@ export const CreateMedicineApplicationDrawer = ({
                       '&::-webkit-calendar-picker-indicator': { display: 'none' },
                       '&::-webkit-inner-spin-button': { display: 'none' },
                     }}
+                    format='##/##/#### ##:##'
+                    mask='_'
                     value={field.value ?? ''}
-                    onChange={(e) => field.onChange(mask.typingBrazilianDateTime(e.target.value))}
+                    onValueChange={(v) => field.onChange(v)}
                     onBlur={field.onBlur}
                   />
                 )}
@@ -357,7 +359,7 @@ export const CreateMedicineApplicationDrawer = ({
                   name='nextApplicationAt'
                   control={control}
                   render={({ field }) => (
-                    <Input
+                    <PatternInput
                       type='text'
                       inputMode='numeric'
                       placeholder='dd/mm/aaaa hh:mm'
@@ -367,8 +369,10 @@ export const CreateMedicineApplicationDrawer = ({
                         '&::-webkit-calendar-picker-indicator': { display: 'none' },
                         '&::-webkit-inner-spin-button': { display: 'none' },
                       }}
+                      format='##/##/#### ##:##'
+                      mask='_'
                       value={field.value ?? ''}
-                      onChange={(e) => field.onChange(mask.typingBrazilianDateTime(e.target.value))}
+                      onValueChange={(v) => field.onChange(v)}
                       onBlur={field.onBlur}
                     />
                   )}
@@ -410,7 +414,7 @@ export const CreateMedicineApplicationDrawer = ({
                   name='endsAt'
                   control={control}
                   render={({ field }) => (
-                    <Input
+                    <PatternInput
                       type='text'
                       inputMode='numeric'
                       placeholder='dd/mm/aaaa hh:mm'
@@ -420,8 +424,10 @@ export const CreateMedicineApplicationDrawer = ({
                         '&::-webkit-calendar-picker-indicator': { display: 'none' },
                         '&::-webkit-inner-spin-button': { display: 'none' },
                       }}
+                      format='##/##/#### ##:##'
+                      mask='_'
                       value={field.value ?? ''}
-                      onChange={(e) => field.onChange(mask.typingBrazilianDateTime(e.target.value))}
+                      onValueChange={(v) => field.onChange(v)}
                       onBlur={field.onBlur}
                     />
                   )}

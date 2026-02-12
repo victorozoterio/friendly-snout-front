@@ -1,13 +1,6 @@
-import {
-  formatToBrazilianDateMask,
-  formatToBrazilianDateTimeMask,
-  typingBrazilianDateMask,
-  typingBrazilianDateTimeMask,
-} from './date';
+import { formatToBrazilianDateMask, formatToBrazilianDateTimeMask } from './date';
 
 export const mask = {
-  typingBrazilianDate: typingBrazilianDateMask,
-  typingBrazilianDateTime: typingBrazilianDateTimeMask,
   formatToBrazilianDate: formatToBrazilianDateMask,
   formatToBrazilianDateTime: formatToBrazilianDateTimeMask,
 };
