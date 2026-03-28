@@ -102,7 +102,7 @@ export const Dashboard = () => {
               total={quarantine?.total ?? 0}
             />
             <StageCard
-              title='Abrigados'
+              title='Acolhidos'
               dogs={sheltered?.dogs ?? 0}
               cats={sheltered?.cats ?? 0}
               total={sheltered?.total ?? 0}

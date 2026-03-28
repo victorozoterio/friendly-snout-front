@@ -76,7 +76,7 @@ export const colorOptions: readonly SelectOption<AnimalColor>[] = [
 
 export const statusOptions: readonly SelectOption<AnimalStatus>[] = [
   { value: AnimalStatus.QUARANTINE, label: 'Quarentena' },
-  { value: AnimalStatus.SHELTERED, label: 'Abrigado' },
+  { value: AnimalStatus.SHELTERED, label: 'Acolhido' },
   { value: AnimalStatus.ADOPTED, label: 'Adotado' },
   { value: AnimalStatus.LOST, label: 'Perdido' },
 ];
