@@ -16,10 +16,12 @@ import {
   Switch,
   Text,
   Textarea,
+  useToast,
   VStack,
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { Select as ChakraSelect } from 'chakra-react-select';
 import * as React from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -125,6 +127,8 @@ export const UpdateAnimalDrawer = ({ isOpen, onClose, uuid }: AnimalDrawerProps)
     };
   }, [photoPreviewUrl]);
 
+  const toast = useToast();
+
   const updateMutation = useMutation({
     mutationFn: ({ uuid: animalUuid, data: animalData }: { uuid: string; data: UpdateAnimalRequest }) =>
       updateAnimal(animalUuid, animalData),
@@ -134,6 +138,32 @@ export const UpdateAnimalDrawer = ({ isOpen, onClose, uuid }: AnimalDrawerProps)
       reset();
       clearPhotoPreview();
       onClose();
+    },
+
+    onError: (error: AxiosError<{ message: string | string[] }>) => {
+      let message = error.response?.data?.message;
+
+      if (Array.isArray(message)) {
+        message = message.join(', ');
+      }
+
+      if (message === 'File too large') {
+        message = 'O arquivo deve ter no máximo 10MB.';
+      }
+
+      if (message?.includes('Invalid file type')) {
+        const formats = message.split('Allowed: ')[1];
+        message = `São permitidos apenas arquivos nos formatos: ${formats}`;
+      }
+
+      toast({
+        title: 'Erro ao atualizar o animal',
+        description: message || 'Não foi possível atualizar o animal.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'top-right',
+      });
     },
   });
 

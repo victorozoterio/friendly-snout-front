@@ -15,10 +15,12 @@ import {
   Switch,
   Text,
   Textarea,
+  useToast,
   VStack,
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { Select as ChakraSelect } from 'chakra-react-select';
 import * as React from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -82,6 +84,8 @@ export const CreateAnimalDrawer = ({ isOpen, onClose }: AnimalDrawerProps) => {
     };
   }, [photoPreviewUrl]);
 
+  const toast = useToast();
+
   const createMutation = useMutation({
     mutationFn: createAnimal,
     onSuccess: () => {
@@ -89,6 +93,31 @@ export const CreateAnimalDrawer = ({ isOpen, onClose }: AnimalDrawerProps) => {
       reset();
       clearPhotoPreview();
       onClose();
+    },
+    onError: (error: AxiosError<{ message: string | string[] }>) => {
+      let message = error?.response?.data?.message;
+
+      if (Array.isArray(message)) {
+        message = message.join(', ');
+      }
+
+      if (message === 'File too large') {
+        message = 'O arquivo deve ter no máximo 10MB.';
+      }
+
+      if (message?.includes('Invalid file type')) {
+        const formats = message.split('Allowed: ')[1];
+        message = `São permitidos apenas arquivos nos formatos: ${formats}`;
+      }
+
+      toast({
+        title: 'Erro ao cadastrar o animal',
+        description: message || 'Não foi possível cadastrar o animal.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'top-right',
+      });
     },
   });
 
