@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Button,
   Drawer,
   DrawerBody,
@@ -19,6 +20,7 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Select as ChakraSelect } from 'chakra-react-select';
+import * as React from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { FormErrorInline, PatternInput } from '../../../../components';
 import { createAnimal } from '../../../../services';
@@ -47,6 +49,8 @@ import { CreateAnimalFormData, createAnimalSchema } from './schema';
 export const CreateAnimalDrawer = ({ isOpen, onClose }: AnimalDrawerProps) => {
   const queryClient = useQueryClient();
 
+  const [photoPreviewUrl, setPhotoPreviewUrl] = React.useState<string | null>(null);
+
   const {
     register,
     handleSubmit,
@@ -65,11 +69,25 @@ export const CreateAnimalDrawer = ({ isOpen, onClose }: AnimalDrawerProps) => {
     } as CreateAnimalFormData,
   });
 
+  const clearPhotoPreview = React.useCallback(() => {
+    setPhotoPreviewUrl((prev) => {
+      if (prev) URL.revokeObjectURL(prev);
+      return null;
+    });
+  }, []);
+
+  React.useEffect(() => {
+    return () => {
+      if (photoPreviewUrl) URL.revokeObjectURL(photoPreviewUrl);
+    };
+  }, [photoPreviewUrl]);
+
   const createMutation = useMutation({
     mutationFn: createAnimal,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['animals', 'list'] });
       reset();
+      clearPhotoPreview();
       onClose();
     },
   });
@@ -84,6 +102,7 @@ export const CreateAnimalDrawer = ({ isOpen, onClose }: AnimalDrawerProps) => {
   const handleClose = () => {
     if (createMutation.isPending) return;
     reset();
+    clearPhotoPreview();
     onClose();
   };
 
@@ -116,8 +135,67 @@ export const CreateAnimalDrawer = ({ isOpen, onClose }: AnimalDrawerProps) => {
           </HStack>
         </DrawerHeader>
 
-        <DrawerBody px={8} py={6} bg='background' overflowY='auto' overflowX='hidden'>
+        <DrawerBody px={8} bg='background' overflowY='auto' overflowX='hidden'>
           <VStack as='form' id='create-animal-form' spacing={2} align='stretch' onSubmit={handleSubmit(onSubmit)}>
+            <FormControl isInvalid={!!errors.file} position='relative' pb='22px'>
+              <FormLabel color='primary' fontWeight='bold' fontSize='sm'>
+                Foto de perfil
+              </FormLabel>
+
+              <Controller
+                name='file'
+                control={control}
+                render={({ field: { onChange, ref } }) => (
+                  <VStack spacing={3} align='center'>
+                    <Input
+                      ref={ref}
+                      type='file'
+                      accept='image/*'
+                      display='none'
+                      id='animal-photo-input-create'
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        onChange(file);
+
+                        setPhotoPreviewUrl((prev) => {
+                          if (prev) URL.revokeObjectURL(prev);
+                          return file ? URL.createObjectURL(file) : null;
+                        });
+                      }}
+                    />
+
+                    <Button
+                      as='label'
+                      htmlFor='animal-photo-input-create'
+                      variant='ghost'
+                      p={0}
+                      h='auto'
+                      borderRadius='full'
+                      _hover={{ bg: 'transparent' }}
+                      _active={{ bg: 'transparent' }}
+                      cursor='pointer'
+                    >
+                      <Avatar size='xl' src={photoPreviewUrl ?? undefined} name='Foto de perfil' bg='gray.200' />
+                    </Button>
+
+                    <Button
+                      as='label'
+                      htmlFor='animal-photo-input-create'
+                      variant='outline'
+                      borderColor='primary'
+                      color='primary'
+                      size='sm'
+                      cursor='pointer'
+                    >
+                      Selecionar foto
+                    </Button>
+                  </VStack>
+                )}
+              />
+
+              <FormErrorInline message={errors.file?.message} />
+            </FormControl>
+
             <FormControl isInvalid={!!errors.name} position='relative' pb='22px'>
               <FormLabel mb={1} color='primary' fontWeight='bold' fontSize='sm'>
                 Nome *

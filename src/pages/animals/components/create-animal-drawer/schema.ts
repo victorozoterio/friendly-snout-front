@@ -26,6 +26,7 @@ export const createAnimalSchema = z.object({
   fiv: z.enum(AnimalFivAndFelv, { message: 'Campo obrigatório' }),
   felv: z.enum(AnimalFivAndFelv, { message: 'Campo obrigatório' }),
   notes: z.string().optional(),
+  file: z.instanceof(File).optional(),
 });
 
 export type CreateAnimalFormData = z.infer<typeof createAnimalSchema>;

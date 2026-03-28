@@ -16,21 +16,28 @@ export const createAnimal = async ({
   fiv,
   felv,
   notes,
+  file,
 }: T.CreateAnimalRequest) => {
-  const { data } = await api.post('/animals', {
-    name,
-    sex,
-    species,
-    breed,
-    size,
-    color,
-    birthDate,
-    microchip,
-    rga,
-    castrated,
-    fiv,
-    felv,
-    notes,
+  const formData = new FormData();
+
+  formData.append('name', name);
+  formData.append('sex', sex);
+  formData.append('species', species);
+  formData.append('breed', breed);
+  formData.append('size', size);
+  formData.append('color', color);
+  formData.append('castrated', String(castrated));
+  formData.append('fiv', fiv);
+  formData.append('felv', felv);
+
+  if (birthDate) formData.append('birthDate', birthDate);
+  if (microchip) formData.append('microchip', microchip);
+  if (rga) formData.append('rga', rga);
+  if (notes) formData.append('notes', notes);
+  if (file) formData.append('file', file);
+
+  const { data } = await api.post('/animals', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
   });
 
   return data;
@@ -76,23 +83,29 @@ export const updateAnimal = async (
     felv,
     status,
     notes,
+    file,
   }: T.UpdateAnimalRequest,
 ) => {
-  const { data } = await api.patch(`/animals/${uuid}`, {
-    name,
-    sex,
-    species,
-    breed,
-    size,
-    color,
-    birthDate,
-    microchip,
-    rga,
-    castrated,
-    fiv,
-    felv,
-    status,
-    notes,
+  const formData = new FormData();
+
+  if (name !== undefined) formData.append('name', name);
+  if (sex !== undefined) formData.append('sex', sex);
+  if (species !== undefined) formData.append('species', species);
+  if (breed !== undefined) formData.append('breed', breed);
+  if (size !== undefined) formData.append('size', size);
+  if (color !== undefined) formData.append('color', color);
+  if (birthDate !== undefined && birthDate !== null) formData.append('birthDate', birthDate);
+  if (microchip !== undefined && microchip !== null) formData.append('microchip', microchip);
+  if (rga !== undefined && rga !== null) formData.append('rga', rga);
+  if (castrated !== undefined) formData.append('castrated', String(castrated));
+  if (fiv !== undefined) formData.append('fiv', fiv);
+  if (felv !== undefined) formData.append('felv', felv);
+  if (status !== undefined) formData.append('status', status);
+  if (notes !== undefined && notes !== null) formData.append('notes', notes);
+  if (file) formData.append('file', file);
+
+  const { data } = await api.patch(`/animals/${uuid}`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
   });
 
   return data;

@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Button,
   Drawer,
   DrawerBody,
@@ -53,6 +54,8 @@ import { UpdateAnimalFormData, updateAnimalSchema } from './schema';
 export const UpdateAnimalDrawer = ({ isOpen, onClose, uuid }: AnimalDrawerProps) => {
   const queryClient = useQueryClient();
 
+  const [photoPreviewUrl, setPhotoPreviewUrl] = React.useState<string | null>(null);
+
   const {
     register,
     handleSubmit,
@@ -78,6 +81,13 @@ export const UpdateAnimalDrawer = ({ isOpen, onClose, uuid }: AnimalDrawerProps)
     enabled: isOpen && !!uuid,
   });
 
+  const clearPhotoPreview = React.useCallback(() => {
+    setPhotoPreviewUrl((prev) => {
+      if (prev) URL.revokeObjectURL(prev);
+      return null;
+    });
+  }, []);
+
   React.useEffect(() => {
     if (!animalQuery.data) return;
 
@@ -99,12 +109,21 @@ export const UpdateAnimalDrawer = ({ isOpen, onClose, uuid }: AnimalDrawerProps)
         fiv: a.fiv as AnimalFivAndFelv,
         felv: a.felv as AnimalFivAndFelv,
         notes: a.notes ?? undefined,
+        file: undefined,
       },
       {
         keepDefaultValues: true,
       },
     );
-  }, [animalQuery.data, reset]);
+
+    clearPhotoPreview();
+  }, [animalQuery.data, reset, clearPhotoPreview]);
+
+  React.useEffect(() => {
+    return () => {
+      if (photoPreviewUrl) URL.revokeObjectURL(photoPreviewUrl);
+    };
+  }, [photoPreviewUrl]);
 
   const updateMutation = useMutation({
     mutationFn: ({ uuid: animalUuid, data: animalData }: { uuid: string; data: UpdateAnimalRequest }) =>
@@ -113,6 +132,7 @@ export const UpdateAnimalDrawer = ({ isOpen, onClose, uuid }: AnimalDrawerProps)
       queryClient.invalidateQueries({ queryKey: ['animals', 'list'] });
       queryClient.invalidateQueries({ queryKey: ['animals', 'detail', uuid] });
       reset();
+      clearPhotoPreview();
       onClose();
     },
   });
@@ -137,11 +157,13 @@ export const UpdateAnimalDrawer = ({ isOpen, onClose, uuid }: AnimalDrawerProps)
   const handleClose = () => {
     if (updateMutation.isPending) return;
     reset();
+    clearPhotoPreview();
     onClose();
   };
 
   const isLoadingAnimal = animalQuery.isLoading || (animalQuery.isFetching && !animalQuery.data);
   const isErrorAnimal = animalQuery.isError;
+  const avatarSrc = photoPreviewUrl ?? animalQuery.data?.photoUrl ?? undefined;
 
   return (
     <Drawer isOpen={isOpen} placement='right' onClose={handleClose} size='md'>
@@ -172,7 +194,7 @@ export const UpdateAnimalDrawer = ({ isOpen, onClose, uuid }: AnimalDrawerProps)
           </HStack>
         </DrawerHeader>
 
-        <DrawerBody px={8} py={6} bg='background' overflowY='auto' overflowX='hidden'>
+        <DrawerBody px={8} bg='background' overflowY='auto' overflowX='hidden'>
           {isLoadingAnimal && (
             <VStack mt={8} spacing={4}>
               <Spinner size='lg' />
@@ -193,6 +215,65 @@ export const UpdateAnimalDrawer = ({ isOpen, onClose, uuid }: AnimalDrawerProps)
 
           {!isLoadingAnimal && !isErrorAnimal && (
             <VStack as='form' id='update-animal-form' spacing={2} align='stretch' onSubmit={handleSubmit(onSubmit)}>
+              <FormControl isInvalid={!!errors.file} position='relative' pb='22px'>
+                <FormLabel mb={2} color='primary' fontWeight='bold' fontSize='sm'>
+                  Foto de perfil
+                </FormLabel>
+
+                <Controller
+                  name='file'
+                  control={control}
+                  render={({ field: { onChange, ref } }) => (
+                    <VStack spacing={3} align='center'>
+                      <Input
+                        ref={ref}
+                        type='file'
+                        accept='image/*'
+                        display='none'
+                        id='animal-photo-input-update'
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          onChange(file);
+
+                          setPhotoPreviewUrl((prev) => {
+                            if (prev) URL.revokeObjectURL(prev);
+                            return file ? URL.createObjectURL(file) : null;
+                          });
+                        }}
+                      />
+
+                      <Button
+                        as='label'
+                        htmlFor='animal-photo-input-update'
+                        variant='ghost'
+                        p={0}
+                        h='auto'
+                        borderRadius='full'
+                        _hover={{ bg: 'transparent' }}
+                        _active={{ bg: 'transparent' }}
+                        cursor='pointer'
+                      >
+                        <Avatar size='xl' src={avatarSrc} name='Foto de perfil' bg='gray.200' />
+                      </Button>
+
+                      <Button
+                        as='label'
+                        htmlFor='animal-photo-input-update'
+                        variant='outline'
+                        borderColor='primary'
+                        color='primary'
+                        size='sm'
+                        cursor='pointer'
+                      >
+                        Selecionar foto
+                      </Button>
+                    </VStack>
+                  )}
+                />
+
+                <FormErrorInline message={errors.file?.message} />
+              </FormControl>
+
               <FormControl isInvalid={!!errors.name} position='relative' pb='22px'>
                 <FormLabel mb={1} color='primary' fontWeight='bold' fontSize='sm'>
                   Nome *

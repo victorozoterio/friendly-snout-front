@@ -23,6 +23,7 @@ export type CreateAnimalRequest = {
   fiv: AnimalFivAndFelv;
   felv: AnimalFivAndFelv;
   notes?: string;
+  file?: File;
 };
 
 export type TotalAnimalsPerStageResponse = {
@@ -63,6 +64,7 @@ export type GetAnimalResponse = {
   felv: AnimalFivAndFelv;
   status: AnimalStatus;
   notes?: string;
+  photoUrl?: string;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -82,6 +84,7 @@ export type UpdateAnimalRequest = {
   felv?: AnimalFivAndFelv;
   status?: AnimalStatus;
   notes?: string;
+  file?: File;
 };
 
 export type DeleteAnimalRequest = {
