@@ -1,4 +1,6 @@
 import {
+  Avatar,
+  Badge,
   Box,
   Button,
   HStack,
@@ -30,6 +32,15 @@ import { mask, Pagination } from '../../utils';
 import { CreateAnimalDrawer } from './components/create-animal-drawer';
 import { UpdateAnimalDrawer } from './components/update-animal-drawer';
 import { applySort, DEFAULT_SORT_BY, DEFAULT_SORT_STATE, SortableKey, SortState } from './utils/sort';
+
+const statusColorMap: Record<string, string> = {
+  quarentena: 'yellow',
+  acolhido: 'blue',
+  adotado: 'green',
+  perdido: 'red',
+};
+
+const formatStatus = (status: string) => status.charAt(0).toUpperCase() + status.slice(1);
 
 export const Animals = () => {
   const queryClient = useQueryClient();
@@ -234,15 +245,6 @@ export const Animals = () => {
                     <Thead bg='secondary'>
                       <Tr>
                         <TableSortableHeader
-                          w='11%'
-                          sortKey='status'
-                          sortState={sortState}
-                          onSort={(key) => handleSortClick(key as SortableKey)}
-                        >
-                          Estágio
-                        </TableSortableHeader>
-
-                        <TableSortableHeader
                           w='26%'
                           sortKey='name'
                           sortState={sortState}
@@ -276,6 +278,15 @@ export const Animals = () => {
                           onSort={(key) => handleSortClick(key as SortableKey)}
                         >
                           Porte
+                        </TableSortableHeader>
+
+                        <TableSortableHeader
+                          w='11%'
+                          sortKey='status'
+                          sortState={sortState}
+                          onSort={(key) => handleSortClick(key as SortableKey)}
+                        >
+                          Estágio
                         </TableSortableHeader>
 
                         <TableSortableHeader
@@ -320,11 +331,10 @@ export const Animals = () => {
                         animals.map((animal) => (
                           <Tr key={animal.uuid} bg='primary'>
                             <Td color='white' fontWeight='bold' textTransform='capitalize'>
-                              <Text isTruncated>{animal.status}</Text>
-                            </Td>
-
-                            <Td color='white' fontWeight='bold' textTransform='capitalize'>
-                              <Text isTruncated>{animal.name}</Text>
+                              <HStack spacing={3} overflow='hidden'>
+                                <Avatar size='sm' src={animal.photoUrl ?? undefined} name={animal.name} bg='gray.200' />
+                                <Text isTruncated>{animal.name}</Text>
+                              </HStack>
                             </Td>
 
                             <Td color='white' fontWeight='bold' textTransform='capitalize'>
@@ -337,6 +347,12 @@ export const Animals = () => {
 
                             <Td color='white' fontWeight='bold' textTransform='capitalize'>
                               <Text isTruncated>{animal.size}</Text>
+                            </Td>
+
+                            <Td color='white' fontWeight='bold' textTransform='capitalize'>
+                              <Badge colorScheme={statusColorMap[animal.status]} borderRadius='full' px={3}>
+                                {formatStatus(animal.status)}
+                              </Badge>
                             </Td>
 
                             <Td color='white' fontWeight='bold'>
