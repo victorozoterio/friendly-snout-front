@@ -12,10 +12,7 @@ export type CreateSortConfigParams<K extends string> = {
   defaultSortBy: string;
 };
 
-export function createSortConfig<K extends string>({
-  fields,
-  defaultSortBy,
-}: CreateSortConfigParams<K>) {
+export function createSortConfig<K extends string>({ fields, defaultSortBy }: CreateSortConfigParams<K>) {
   const DEFAULT_SORT_BY = defaultSortBy;
   const DEFAULT_SORT_STATE: SortState<K> = { key: null, dir: null };
 

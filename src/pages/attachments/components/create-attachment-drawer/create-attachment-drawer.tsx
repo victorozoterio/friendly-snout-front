@@ -123,7 +123,7 @@ export const CreateAttachmentDrawer = ({ isOpen, onClose, animalUuid }: CreateAt
           </HStack>
         </DrawerHeader>
 
-        <DrawerBody px={8} py={6} bg='background' overflowY='auto' overflowX='hidden'>
+        <DrawerBody px={8} bg='background' overflowY='auto' overflowX='hidden'>
           <VStack as='form' id='create-attachment-form' spacing={2} align='stretch' onSubmit={handleSubmit(onSubmit)}>
             <FormControl isInvalid={!!errors.file} position='relative' pb='22px'>
               <FormLabel mb={1} color='primary' fontWeight='bold' fontSize='sm'>

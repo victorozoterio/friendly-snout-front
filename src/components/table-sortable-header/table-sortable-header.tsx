@@ -8,13 +8,7 @@ const SortIcon = ({ sortState, sortKey }: { sortState: TableSortState; sortKey: 
   return <ArrowDown size={16} />;
 };
 
-export const TableSortableHeader = ({
-  w,
-  sortKey,
-  sortState,
-  onSort,
-  children,
-}: TableSortableHeaderProps) => {
+export const TableSortableHeader = ({ w, sortKey, sortState, onSort, children }: TableSortableHeaderProps) => {
   return (
     <Th
       w={w}

@@ -113,7 +113,7 @@ export const UpdateMedicineBrandDrawer = ({ isOpen, onClose, uuid }: UpdateMedic
           </HStack>
         </DrawerHeader>
 
-        <DrawerBody px={8} py={6} bg='background' overflowY='auto' overflowX='hidden'>
+        <DrawerBody px={8} bg='background' overflowY='auto' overflowX='hidden'>
           {isLoadingBrand && (
             <VStack mt={8} spacing={4}>
               <Spinner size='lg' />

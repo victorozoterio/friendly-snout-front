@@ -120,7 +120,7 @@ export const CreateMedicineDrawer = ({ isOpen, onClose }: CreateMedicineDrawerPr
           </HStack>
         </DrawerHeader>
 
-        <DrawerBody px={8} py={6} bg='background' overflowY='auto' overflowX='hidden'>
+        <DrawerBody px={8} bg='background' overflowY='auto' overflowX='hidden'>
           <VStack as='form' id='create-medicine-form' spacing={2} align='stretch' onSubmit={handleSubmit(onSubmit)}>
             <FormControl isInvalid={!!errors.name} position='relative' pb='22px'>
               <FormLabel mb={1} color='primary' fontWeight='bold' fontSize='sm'>

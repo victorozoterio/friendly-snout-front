@@ -230,7 +230,7 @@ export const CreateMedicineApplicationDrawer = ({
           </HStack>
         </DrawerHeader>
 
-        <DrawerBody px={8} py={6} bg='background' overflowY='auto' overflowX='hidden'>
+        <DrawerBody px={8} bg='background' overflowY='auto' overflowX='hidden'>
           <VStack
             as='form'
             id='create-medicine-application-form'
